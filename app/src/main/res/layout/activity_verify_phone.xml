@@ -53,6 +53,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tvcountDown"
             app:lineColor="@color/colorPrimary"
             app:viewType="rectangle" />
+
         <Button
             android:id="@+id/buttonSignIn"
             android:layout_width="250dp"
@@ -60,10 +61,12 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="64dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginBottom="16dp"
             android:background="@color/colorPrimary"
             android:text="CONTINUE"
             android:textAllCaps="false"
             android:textColor="#cdd8f1"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="parent"

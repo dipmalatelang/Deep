@@ -4,20 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.travel.cotravel.BaseActivity;
-import com.travel.cotravel.R;
-import com.travel.cotravel.fragment.account.profile.ui.ProfileActivity;
-import com.travel.cotravel.fragment.member.adapter.MembersAdapter;
-import com.travel.cotravel.fragment.trip.module.TripList;
-import com.travel.cotravel.fragment.trip.module.User;
-import com.travel.cotravel.fragment.visitor.UserImg;
-import com.travel.cotravel.fragment.account.profile.module.Upload;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -26,6 +20,14 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.annotations.NotNull;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.travel.cotravel.BaseActivity;
+import com.travel.cotravel.R;
+import com.travel.cotravel.fragment.account.profile.module.Upload;
+import com.travel.cotravel.fragment.account.profile.ui.ProfileActivity;
+import com.travel.cotravel.fragment.member.adapter.MembersAdapter;
+import com.travel.cotravel.fragment.trip.module.TripList;
+import com.travel.cotravel.fragment.trip.module.User;
+import com.travel.cotravel.fragment.visitor.UserImg;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -33,10 +35,14 @@ import java.util.Objects;
 import static com.travel.cotravel.Constants.FavoritesInstance;
 import static com.travel.cotravel.Constants.PicturesInstance;
 import static com.travel.cotravel.Constants.UsersInstance;
+import static com.travel.cotravel.fragment.member.adapter.MembersAdapter.SPAN_COUNT_ONE;
+import static com.travel.cotravel.fragment.member.adapter.MembersAdapter.SPAN_COUNT_THREE;
 
 public class MembersActivity extends BaseActivity {
-    private RecyclerView recyclerView;
 
+
+    private RecyclerView recyclerView;
+    GridLayoutManager mGridLayoutManager;
     private MembersAdapter membersAdapter;
     SharedPreferences sharedPreferences;
     String look_user;
@@ -52,7 +58,7 @@ public class MembersActivity extends BaseActivity {
 
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
-        GridLayoutManager mGridLayoutManager = new GridLayoutManager(this, 2);
+        mGridLayoutManager = new GridLayoutManager(this, SPAN_COUNT_ONE);
         recyclerView.setLayoutManager(mGridLayoutManager);
 
         sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
@@ -139,7 +145,7 @@ public class MembersActivity extends BaseActivity {
 
                                                         }
 
-                                                    });
+                                                    },mGridLayoutManager);
                                                     recyclerView.setAdapter(membersAdapter);
                                                     membersAdapter.notifyDataSetChanged();
 
@@ -171,6 +177,37 @@ public class MembersActivity extends BaseActivity {
                     }
                 }
         );
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.meun_main, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_switch_layout) {
+            switchLayout();
+            switchIcon(item);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    private void switchLayout() {
+        if (mGridLayoutManager.getSpanCount() == SPAN_COUNT_ONE) {
+            mGridLayoutManager.setSpanCount(SPAN_COUNT_THREE);
+        } else {
+            mGridLayoutManager.setSpanCount(SPAN_COUNT_ONE);
+        }
+        membersAdapter.notifyItemRangeChanged(0, membersAdapter.getItemCount());
+    }
+
+    private void switchIcon(MenuItem item) {
+        if (mGridLayoutManager.getSpanCount() == SPAN_COUNT_THREE) {
+            item.setIcon(getResources().getDrawable(R.drawable.ic_span_3));
+        } else {
+            item.setIcon(getResources().getDrawable(R.drawable.ic_span_1));
+        }
     }
 
 }

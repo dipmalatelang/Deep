@@ -166,6 +166,8 @@
             android:padding="4dp"
             android:spinnerMode="dropdown"
             android:popupBackground="@color/gray_bg"
+            android:background="@color/transparent"
+            style="@style/text_view_style"
             app:layout_constraintTop_toBottomOf="@+id/tv_age_text" />
 
         <View

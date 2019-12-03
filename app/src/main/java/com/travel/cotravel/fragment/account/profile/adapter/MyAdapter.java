@@ -3,6 +3,7 @@ package com.travel.cotravel.fragment.account.profile.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
+
 import com.travel.cotravel.R;
 import com.travel.cotravel.fragment.account.profile.module.Upload;
 import com.travel.cotravel.fragment.account.profile.ui.EditPhotoActivity;
@@ -30,10 +32,13 @@ import com.wajahatkarim3.easyflipview.EasyFlipView;
 
 import java.util.List;
 
+
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
     private Context mcontext;
     private List<Upload> mUploads;
+    String TAG = "AdapterClass";
     String uid;
+    String previousValue="";
     String gender;
 
     public MyAdapter(Context context, String uid, String gender, List<Upload> uploads, PhotoInterface listener) {
@@ -60,6 +65,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
 
         if(mUploads.get(position).getName().equalsIgnoreCase("Video"))
         {
+            holder.set_main.setVisibility(View.GONE);
             holder.imageView.setVisibility(View.GONE);
             holder.progressBar.setVisibility(View.GONE);
             holder.videoView.setVisibility(View.VISIBLE);
@@ -206,7 +212,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
 
     PhotoInterface listener;
     public interface PhotoInterface{
-        void setProfilePhoto(String id, String previousValue,int position);
+        void setProfilePhoto(String id, String previousValue, int position);
         void removePhoto(String id);
         void setPhotoAsPrivate(String id);
     }

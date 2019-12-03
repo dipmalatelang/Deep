@@ -14,15 +14,14 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_margin="2dp"
         app:cardCornerRadius="10dp"
-        android:layout_gravity="center"
         android:padding="8dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="135dp"
             android:background="@color/colorAccent"
             android:layout_gravity="center">
 
@@ -72,7 +71,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="2dp"
-        android:layout_gravity="center"
         app:cardCornerRadius="10dp"
         android:padding="8dp">
 
@@ -82,21 +80,23 @@
             android:id="@+id/rl_image">
 
             <ImageView
+                android:layout_centerInParent="true"
                 android:id="@+id/imageView"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="0dp"
-                android:adjustViewBounds="true"
                 android:contentDescription="TODO"
-                android:scaleType="centerCrop"
                 android:src="@drawable/whitewallpapar" />
 
             <VideoView
                 android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
                 android:id="@+id/videoView"/>
 
             <ProgressBar

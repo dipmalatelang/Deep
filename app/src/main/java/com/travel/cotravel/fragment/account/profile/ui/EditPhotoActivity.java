@@ -5,25 +5,26 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.travel.cotravel.BaseActivity;
-import com.travel.cotravel.R;
 
-import com.travel.cotravel.fragment.account.profile.adapter.MyAdapter;
-import com.travel.cotravel.fragment.account.profile.module.Upload;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -37,6 +38,10 @@ import com.google.firebase.database.annotations.NotNull;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.travel.cotravel.BaseActivity;
+import com.travel.cotravel.R;
+import com.travel.cotravel.fragment.account.profile.adapter.MyAdapter;
+import com.travel.cotravel.fragment.account.profile.module.Upload;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -136,6 +141,7 @@ public class EditPhotoActivity extends BaseActivity {
 
                             if (!previousValue.equals("") && !previousValue.equals(id))
                                 PicturesInstance.child(fuser.getUid()).child(previousValue).child("type").setValue(2);
+                            Log.i(TAG, "setProfilePhoto: " + public_uploads.get(pos).getUrl());
                             profilePhotoDetails(public_uploads.get(pos).getUrl());
                         }
 
@@ -261,9 +267,30 @@ public class EditPhotoActivity extends BaseActivity {
         else if(requestCode == PICK_VIDEO_REQUEST && data!=null && data.getData() !=null)
         {
             videoPath=data.getData();
-            uploadVideo(videoPath);
+            checkDurationOfVideo(videoPath);
         }
     }
+
+    private void checkDurationOfVideo(Uri videoPath) {
+        try {
+            if (videoPath != null) {
+                Log.i(TAG, "checkDurationOfVideo: working");
+                MediaPlayer mp = MediaPlayer.create(this, videoPath);
+                int duration = mp.getDuration();
+                mp.release();
+
+                if((duration/1000) > 10){
+                    // Show Your Messages
+                    snackBar(llSelectImage, "Video duration is more than 10s");
+                }else{
+                    uploadVideo(videoPath);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public String getFileExtension(Uri uri) {
         ContentResolver cR = this.getContentResolver();
@@ -296,13 +323,14 @@ public class EditPhotoActivity extends BaseActivity {
                                 public void onComplete(@NonNull Task<Uri> task) {
                                     if (task.isSuccessful()) {
                                         getDownloadImageUrl = Objects.requireNonNull(task.getResult()).toString();
+                                        Log.i("FirebaseImages", getDownloadImageUrl);
 
-                                        Upload upload;
-                                        if (public_uploads.size() == 0) {
+//                                        Upload upload;
+                                     /*   if (public_uploads.size() == 0) {
                                             upload = new Upload(uploadId, "Video", getDownloadImageUrl, 1);
-                                        } else {
-                                            upload = new Upload(uploadId, "Video", getDownloadImageUrl, 2);
-                                        }
+                                        } else {*/
+                                        Upload  upload = new Upload(uploadId, "Video", getDownloadImageUrl, 2);
+//                                        }
 
                                         PicturesInstance.child(fuser.getUid()).child(Objects.requireNonNull(uploadId)).setValue(upload);
                                     } else {
@@ -354,6 +382,7 @@ public class EditPhotoActivity extends BaseActivity {
                                 public void onComplete(@NonNull Task<Uri> task) {
                                     if (task.isSuccessful()) {
                                         getDownloadImageUrl = Objects.requireNonNull(task.getResult()).toString();
+                                        Log.i("FirebaseImages", getDownloadImageUrl);
 
                                         Upload upload;
                                         if (public_uploads.size() == 0) {

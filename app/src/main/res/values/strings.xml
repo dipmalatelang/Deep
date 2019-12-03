@@ -32,6 +32,7 @@
     <string name="gave_access">Gave you access to see private photos</string>
     <string name="want_to_see_photo">Wants to see your private photos</string>
     <string name="Reset_password">By clicking RESET ,you will receive an email to reset you password</string>
+    <string name="resend_code"><u>Resend Code</u></string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

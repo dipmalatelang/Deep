@@ -2,18 +2,18 @@ package com.travel.cotravel.fragment.account.profile.verify;
 
 import android.content.Intent;
 import android.os.Bundle;
-
+import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.View;
-
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.chaos.view.PinView;
-import com.travel.cotravel.BaseActivity;
-import com.travel.cotravel.R;
-import com.travel.cotravel.fragment.account.profile.ui.AppSettings;
-import com.travel.cotravel.fragment.trip.module.User;
+
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
@@ -30,6 +30,10 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.travel.cotravel.BaseActivity;
+import com.travel.cotravel.R;
+import com.travel.cotravel.fragment.account.profile.ui.AppSettings;
+import com.travel.cotravel.fragment.trip.module.User;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -45,16 +49,20 @@ import static com.travel.cotravel.Constants.UsersInstance;
 public class VerifyPhoneActivity extends BaseActivity {
 
 
-
+    Button buttonSignIn;
     @BindView(R.id.cl_verify)
     ConstraintLayout clVerify;
     @BindView(R.id.pinView)
     PinView pinView;
+    @BindView(R.id.resendCode)
+    TextView resendCode;
+    @BindView(R.id.tvcountDown)
+    TextView tvcountDown;
     private FirebaseAuth mAuth;
     private FirebaseUser fuser;
     private String mVerificationId;
 
-    String mobile,mobileCode;
+    String mobile, mobileCode;
 
     AdView mAdmobView;
 
@@ -69,10 +77,30 @@ public class VerifyPhoneActivity extends BaseActivity {
 
         Intent intent = getIntent();
         mobile = intent.getStringExtra("mobile");
-        mobileCode= intent.getStringExtra("mobileCode");
-        sendVerificationCode(mobile,mobileCode);
+        mobileCode = intent.getStringExtra("mobileCode");
+        sendVerificationCode(mobile, mobileCode);
+        startCounter();
         initAdmob();
     }
+
+    private void startCounter() {
+        new CountDownTimer(21000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                tvcountDown.setVisibility(View.VISIBLE);
+                resendCode.setVisibility(View.GONE);
+                tvcountDown.setText("seconds remaining: " + millisUntilFinished / 1000);
+                //here you can have your logic to set text to edittext
+            }
+
+            public void onFinish() {
+                tvcountDown.setVisibility(View.GONE);
+                resendCode.setVisibility(View.VISIBLE);
+            }
+
+        }.start();
+    }
+
 
     protected void initAdmob() {
         MobileAds.initialize(this, getString(R.string.app_id));
@@ -118,7 +146,7 @@ public class VerifyPhoneActivity extends BaseActivity {
 
         @Override
         public void onVerificationFailed(FirebaseException e) {
-
+            Toast.makeText(VerifyPhoneActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
 
         @Override
@@ -147,9 +175,8 @@ public class VerifyPhoneActivity extends BaseActivity {
     }
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
-        if(fuser!=null)
-        {
-
+        if (fuser != null) {
+            Log.i(TAG, "signInWithPhoneAuthCredential: if");
             fuser.linkWithCredential(credential)
                     .addOnCompleteListener(VerifyPhoneActivity.this, new OnCompleteListener<AuthResult>() {
                         @Override
@@ -157,28 +184,27 @@ public class VerifyPhoneActivity extends BaseActivity {
                             if (task.isSuccessful()) {
                                 //verification successful we will start the profile activity
                                 FirebaseUser user = task.getResult().getUser();
-                                snackBar(clVerify,user.getPhoneNumber()+" "+user.getUid());
-                                setPhoneNumber(fuser.getUid(),mobile,mobileCode);
+                                snackBar(clVerify, user.getPhoneNumber() + " " + user.getUid());
+                                setPhoneNumber(fuser.getUid(), mobile, mobileCode);
                                 updateUI(user);
 
                             } else {
                                 //verification unsuccessful.. display an error message
-
+                                Log.i(TAG, "signInWithPhoneAuthCredential: if else");
                                 String message = "Somthing is wrong, we will fix it soon...";
 
                                 if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                                     message = "Invalid code entered...";
                                 }
-                                snackBar(clVerify,task.getException().getMessage());
-
+                                snackBar(clVerify, task.getException().getMessage());
+                                Log.i(TAG, "onComplete: " + fuser.getUid());
                                 updateUI(null);
 
                             }
                         }
                     });
-        }
-        else {
-
+        } else {
+            Log.i(TAG, "signInWithPhoneAuthCredential: else");
             phoneLogin(credential);
         }
 
@@ -195,12 +221,14 @@ public class VerifyPhoneActivity extends BaseActivity {
         range_age.add("18");
         range_age.add("55");
 
+        Log.i(TAG, "registerPhoneNumber: " + user.getUid() + " " + user.getDisplayName() + " " + user.getEmail() + " " + user.getProviderId() + " " + user.getPhoneNumber());
 
-        User userClass = new User(Objects.requireNonNull(user).getUid(), user.getPhoneNumber(), "offline", user.getPhoneNumber(), "", "18","", user.getProviderId(), "", "", "", "", "", "", travel_with, looking_for, range_age, "", user.getPhoneNumber(), mobile, mobileCode, "", "", 1, false, "");
+        User userClass = new User(Objects.requireNonNull(user).getUid(), user.getPhoneNumber(), "offline", user.getPhoneNumber(), "", "18", "", user.getProviderId(), "", "", "", "", "", "", travel_with, looking_for, range_age, "", user.getPhoneNumber(), mobile, mobileCode, "", "", 1, false, "");
         UsersInstance.child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).setValue(userClass);
     }
 
     private void phoneLogin(PhoneAuthCredential credential) {
+        Log.i(TAG, "phoneLogin: ");
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(VerifyPhoneActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -224,6 +252,7 @@ public class VerifyPhoneActivity extends BaseActivity {
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError databaseError) {
 
+
                                 }
                             });
 
@@ -235,7 +264,7 @@ public class VerifyPhoneActivity extends BaseActivity {
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                                 message = "Invalid code entered...";
                             }
-                            snackBar(clVerify,task.getException().getMessage());
+                            snackBar(clVerify, task.getException().getMessage());
                             dismissProgressDialog();
                             updateUI(null);
 
@@ -244,16 +273,26 @@ public class VerifyPhoneActivity extends BaseActivity {
                 });
     }
 
-    @OnClick(R.id.buttonSignIn)
-    public void onViewClicked() {
-        String code = pinView.getText().toString().trim();
-        if (code.isEmpty() || code.length() < 6) {
-            pinView.setError("Enter valid code");
-            pinView.requestFocus();
-            return;
+    @OnClick({R.id.buttonSignIn, R.id.resendCode})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.buttonSignIn:
+                String code = pinView.getText().toString().trim();
+                if (code.isEmpty() || code.length() < 6) {
+                    pinView.setError("Enter valid code");
+                    pinView.requestFocus();
+                    return;
+                }
+                //verifying the code entered manually
+                verifyVerificationCode(code);
+                break;
+
+            case R.id.resendCode:
+                sendVerificationCode(mobile, mobileCode);
+                startCounter();
+                break;
         }
 
-        //verifying the code entered manually
-        verifyVerificationCode(code);
     }
+
 }

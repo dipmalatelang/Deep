@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "180636531836",
+    "firebase_url": "https://gtapp-e6295.firebaseio.com",
+    "project_id": "gtapp-e6295",
+    "storage_bucket": "gtapp-e6295.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:180636531836:android:e3b55fa67bbd784e9e1df9",
+        "android_client_info": {
+          "package_name": "com.travel.cotravel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "180636531836-i60uf64mqg4uhu3rh58r411ubm6qk6im.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.travel.cotravel",
+            "certificate_hash": "2c5bb8e9f867346dc95e5b19114fb92b73fce257"
+          }
+        },
+        {
+          "client_id": "180636531836-kqe849uosfapkmi8bt8cia28pglvk6aq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrm_G4qQIt7sf7zHfnyvrtByeHUvzvvf8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "180636531836-kqe849uosfapkmi8bt8cia28pglvk6aq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

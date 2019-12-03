@@ -1,0 +1,110 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+        <item name="android:windowAnimationStyle">@style/CustomActivityAnimation</item>
+    </style>
+
+    <style name="MenuStyle" parent="Theme.AppCompat.Light">
+        <item name="android:background">@android:color/white</item>
+    </style>
+
+    <style name="ErrorText" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">#F44336</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="HintText" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="CustomActivityAnimation" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/slide_in_right</item>
+        <item name="android:activityOpenExitAnimation">@anim/slide_out_left</item>
+        <item name="android:activityCloseEnterAnimation">@anim/slide_in_left</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_out_right</item>
+    </style>
+
+    <style name="TextInputLayoutAppearance" parent="Widget.Design.TextInputLayout">
+        <!-- reference our hint & error styles -->
+        <item name="hintTextAppearance">@style/HintText</item>
+        <item name="errorTextAppearance">@style/ErrorText</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textColorHint">@color/white</item>
+        <item name="colorControlNormal">@color/white</item>
+        <item name="colorControlActivated">@color/white</item>
+        <item name="colorControlHighlight">@color/white</item>
+        <item name="android:fontFamily">@font/montserrat</item>
+    </style>
+
+    <style name="Larger_Drawable">
+        <item name="android:textSize">16sp</item>
+        <item name="android:scaleX">1.0</item>
+        <item name="android:scaleY">1.0</item>
+    </style>
+
+    <style name="text_profile_edit_style" parent="TextAppearance.AppCompat.Light.SearchResult.Title">
+        <item name="android:background">@color/background</item>
+        <item name="android:fontFamily">@font/montserrat</item>
+        <item name="android:gravity">start</item>
+        <item name="android:paddingTop">6dp</item>
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="text_view_style1" parent="TextAppearance.AppCompat.Light.SearchResult.Title">
+        <item name="android:fontFamily">@font/montserrat</item>
+        <item name="android:gravity">start</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingStart">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:paddingEnd">8dp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:background">@drawable/ripple_transparent</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="text_view_style" parent="TextAppearance.AppCompat.Light.SearchResult.Title">
+        <item name="android:fontFamily">@font/montserrat</item>
+        <item name="android:gravity">start</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingStart">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:paddingEnd">8dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@drawable/ripple_transparent</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <!--EditProfile-->
+    <style name="edit_text_profile_edit_style">
+        <item name="android:fontFamily">@font/montserrat</item>
+        <item name="android:gravity">start|center_vertical</item>
+        <item name="android:textColor">@color/ebony</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColorHint">@color/background</item>
+        <item name="android:paddingTop">6dp</item>
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:paddingBottom">6dp</item>
+        <item name="android:background">@drawable/ripple_white</item>
+    </style>
+
+    <style name="noToolbar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowAnimationStyle">@style/CustomActivityAnimation</item>
+    </style>
+
+    //Header
+
+
+</resources>

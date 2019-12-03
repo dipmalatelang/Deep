@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_account"
+        android:title="Account"
+        android:icon="@drawable/ic_account_box_black_24dp"/>
+    <item
+        android:id="@+id/nav_favorites"
+        android:title="Favorites"
+        android:icon="@drawable/ic_favorite_black_24dp"/>
+
+    <item
+        android:id="@+id/nav_trip"
+        android:title="Trip"
+        android:icon="@drawable/ic_trip_black_24dp"/>
+
+    <item
+        android:id="@+id/nav_chat"
+        android:title="Chat"
+        android:icon="@drawable/ic_chat_black_24dp"/>
+
+    <item
+        android:id="@+id/nav_vistor"
+        android:title="Vistor"
+        android:icon="@drawable/ic_visitor_black_24dp"/>
+
+</menu>

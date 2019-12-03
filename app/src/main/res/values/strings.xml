@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">CoTravel</string>
+    <string name="facebook_app_id">528956501293279</string>
+    <string name="fb_login_protocol_scheme">fb528956501293279</string>
+
+    <string name="admob_id">ca-app-pub-3453270402337037/4417980719</string>
+    <string name="app_id">ca-app-pub-3453270402337037~1105421664</string>
+
+
+    <string name="home">Home</string>
+
+
+    <string name="register">Registration</string>
+    <string name="logout">Logout</string>
+    <string name="changepassword">Change Password</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="todo">TODO</string>
+
+    <string name="add_phone">Verify your phone number</string>
+    <string name="phone_verify">Please confirm your country code and enter your phone number</string>
+    <string name="verify">Enter the code that was send to</string>
+
+
+    <string name="Photo_request">Photo requests</string>
+    <string name="Photo_permits">Photo permit</string>
+    <string name="given_permits">Your given permits</string>
+
+    <string name="Hide_photo">Hide private photo</string>
+    <string name="can_see">Can see private photos</string>
+
+    <string name="gave_access">Gave you access to see private photos</string>
+    <string name="want_to_see_photo">Wants to see your private photos</string>
+    <string name="Reset_password">By clicking RESET ,you will receive an email to reset you password</string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+
+</resources>

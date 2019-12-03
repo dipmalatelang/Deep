@@ -1,0 +1,496 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
+    android:id="@+id/activity_filter_trip_coodinatelayout"
+    tools:context=".fragment.trip.FilterTripActivity">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:orientation="vertical">
+
+          <!--  <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2"
+
+                android:gravity="center">
+
+
+                <TextView
+                    android:id="@+id/tv_girl"
+                    style="@style/text_view_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:layout_margin="2dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/ripple_primary_color1"
+                    android:checked="true"
+                    android:clickable="true"
+                    android:drawableEnd="@drawable/avatar_girl_32"
+                    android:fontFamily="@font/montserrat"
+                    android:gravity="center"
+                    android:text="FIND A GIRL"
+                    android:textColor="@drawable/color_white_to_black"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/tv_men"
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:textSize="15sp"
+                    android:background="@drawable/ripple_primary_color1"
+                    android:checked="true"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:clickable="true"
+                    android:layout_margin="2dp"
+                    style="@style/text_view_style"
+                    android:textColor="@drawable/color_white_to_black"
+                    android:drawableEnd="@drawable/avatar_boy_32"
+                    android:layout_marginRight="10dp"
+                    android:text="FIND A MAN "/>
+
+
+
+            </LinearLayout>
+-->
+            <LinearLayout
+                android:id="@+id/linearLayoutradiobutton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <RadioGroup
+                    android:id="@+id/rg_trip"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <RadioButton
+                        android:id="@+id/rb_from"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="From"
+                        android:textSize="15sp"
+                        android:checked="true"
+                        android:layout_marginRight="10dp"/>
+
+                    <RadioButton
+                        android:id="@+id/rb_visit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:text="Who wants to visit"/>
+
+                </RadioGroup>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Location :"
+                style="@style/text_profile_edit_style"/>
+
+            <EditText
+                android:id="@+id/et_city"
+                android:textCursorDrawable="@drawable/black_cursor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:hint="City, Country"
+                android:inputType="textCapWords"
+                style="@style/edit_text_profile_edit_style" />
+
+<LinearLayout
+    android:id="@+id/linearLayoutfilter"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Name :"
+        style="@style/text_profile_edit_style"/>
+
+
+    <EditText
+        android:id="@+id/et_name"
+        android:textCursorDrawable="@drawable/black_cursor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:hint="Name"
+        android:inputType="textCapWords"
+
+        style="@style/edit_text_profile_edit_style" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Language :"
+        style="@style/text_profile_edit_style"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp">
+
+        <Spinner
+            android:id="@+id/spinner_lang"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingTop="4dp"
+            android:paddingStart="8dp"
+            android:paddingBottom="4dp"
+            android:spinnerMode="dropdown"
+            android:popupBackground="@color/gray_bg"
+            android:background="@color/transparent"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:paddingEnd="10dp"
+            android:src="@drawable/ic_arrow_drop_down_black_24dp"
+            android:contentDescription="TODO" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Eyes : "
+        style="@style/text_profile_edit_style"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp">
+
+        <Spinner
+            android:id="@+id/spinner_eyes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingTop="4dp"
+            android:paddingStart="8dp"
+            android:paddingBottom="4dp"
+            android:spinnerMode="dropdown"
+            android:popupBackground="@color/gray_bg"
+            android:background="@color/transparent"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:paddingEnd="10dp"
+            android:src="@drawable/ic_arrow_drop_down_black_24dp"
+            android:contentDescription="TODO" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hairs : "
+        style="@style/text_profile_edit_style"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp">
+
+        <Spinner
+            android:id="@+id/spinner_hairs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingTop="4dp"
+            android:paddingStart="8dp"
+            android:paddingBottom="4dp"
+            android:spinnerMode="dropdown"
+            android:popupBackground="@color/gray_bg"
+            android:background="@color/transparent"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:paddingEnd="10dp"
+            android:src="@drawable/ic_arrow_drop_down_black_24dp"
+            android:contentDescription="TODO" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Height : "
+        style="@style/text_profile_edit_style"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp">
+
+        <Spinner
+            android:id="@+id/spinner_height"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingTop="4dp"
+            android:paddingStart="8dp"
+            android:paddingBottom="4dp"
+            android:spinnerMode="dropdown"
+            android:popupBackground="@color/gray_bg"
+            android:background="@color/transparent"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:paddingEnd="10dp"
+            android:src="@drawable/ic_arrow_drop_down_black_24dp"
+            android:contentDescription="TODO" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Body Type : "
+        style="@style/text_profile_edit_style"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp">
+
+        <Spinner
+            android:id="@+id/spinner_bodytype"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingTop="4dp"
+            android:paddingStart="8dp"
+            android:paddingBottom="4dp"
+            android:spinnerMode="dropdown"
+            android:popupBackground="@color/gray_bg"
+            android:background="@color/transparent"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:paddingEnd="10dp"
+            android:src="@drawable/ic_arrow_drop_down_black_24dp"
+            android:contentDescription="TODO" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Looking for : "
+        style="@style/text_profile_edit_style"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp">
+
+        <Spinner
+            android:id="@+id/spinner_look"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingTop="4dp"
+            android:paddingStart="8dp"
+            android:paddingBottom="4dp"
+            android:spinnerMode="dropdown"
+            android:popupBackground="@color/gray_bg"
+            android:background="@color/transparent"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:paddingEnd="10dp"
+            android:src="@drawable/ic_arrow_drop_down_black_24dp"
+            android:contentDescription="TODO" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sort by: : "
+        style="@style/text_profile_edit_style"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp">
+
+        <Spinner
+            android:id="@+id/spinner_sort"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingTop="4dp"
+            android:paddingStart="8dp"
+            android:paddingBottom="4dp"
+            android:spinnerMode="dropdown"
+            android:popupBackground="@color/gray_bg"
+            android:background="@color/transparent"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:paddingEnd="10dp"
+            android:src="@drawable/ic_arrow_drop_down_black_24dp"
+            android:contentDescription="TODO" />
+
+    </RelativeLayout>
+
+
+
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Age : "
+        style="@style/text_profile_edit_style"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:orientation="horizontal"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <Spinner
+                android:id="@+id/spinner_from"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:paddingTop="4dp"
+                android:paddingStart="8dp"
+                android:paddingBottom="4dp"
+                android:spinnerMode="dropdown"
+                android:popupBackground="@color/gray_bg"
+                android:background="@color/transparent"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:paddingEnd="10dp"
+                android:src="@drawable/ic_arrow_drop_down_black_24dp"
+                android:contentDescription="TODO" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <Spinner
+                android:id="@+id/spinner_to"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:paddingTop="4dp"
+                android:paddingStart="8dp"
+                android:paddingBottom="4dp"
+                android:spinnerMode="dropdown"
+                android:popupBackground="@color/gray_bg"
+                android:background="@color/transparent"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:paddingEnd="10dp"
+                android:src="@drawable/ic_arrow_drop_down_black_24dp"
+                android:contentDescription="TODO" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/checkbox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layoutDirection="rtl"
+        android:visibility="gone"
+        style="@style/text_profile_edit_style"
+        android:text="   Show only verified girls: "/>
+
+    <Button
+        android:id="@+id/btn_add_trip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Filter"
+        android:background="@drawable/ripple_primary_color"
+        android:textColor="@color/white"
+        android:fontFamily="@font/montserrat"
+        android:textSize="16sp"
+        android:layout_margin="2dp"
+        android:layout_gravity="center"/>
+
+</LinearLayout>
+
+</LinearLayout>
+
+
+
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

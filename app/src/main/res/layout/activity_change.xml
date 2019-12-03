@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_changepwd"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:backgroundTint="#80000000"
+    android:backgroundTintMode="src_over"
+    android:background="@drawable/img2"
+    tools:context=".fragment.account.profile.ui.ChangePasswordActivity">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_margin="10dp"
+        android:gravity="center"
+        android:padding="10dp"
+        android:background="#33FFFFFF"
+        android:scrollbars="vertical"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.842"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.265">
+
+
+
+
+        <TextView
+            android:id="@+id/tv_title_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/montserrat"
+            android:gravity="center"
+            android:text="@string/changepassword"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btnSaveNow"
+            style="@style/Larger_Drawable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:background="@color/colorPrimary"
+            android:elevation="4dp"
+            android:fontFamily="@font/montserrat"
+            android:outlineAmbientShadowColor="@color/white"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:text="Save"
+            android:textAllCaps="false"
+            android:textColor="@drawable/color_white_to_black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/etConfirmpassword"
+            app:layout_constraintStart_toStartOf="@+id/etConfirmpassword"
+            app:layout_constraintTop_toBottomOf="@+id/etConfirmpassword"
+            app:layout_constraintVertical_bias="0.214" />
+
+
+    <EditText
+        android:id="@+id/etCurrentPassword"
+        android:layout_marginTop="10dp"
+        android:drawableEnd="@drawable/ic_action_eye_off"
+        android:hint="Password"
+        android:theme="@style/TextInputLayoutAppearance"
+        app:layout_constraintEnd_toEndOf="@+id/tv_title_text"
+        app:layout_constraintStart_toStartOf="@+id/tv_title_text"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:padding="10dp"
+        android:textColor="@color/white"
+        android:drawablePadding="5dp"
+        android:textCursorDrawable="@drawable/cursor_primary"
+        android:textSize="16sp"
+        />
+
+
+
+
+        <EditText
+            android:id="@+id/etNewpassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:drawableEnd="@drawable/ic_action_eye_off"
+            android:drawablePadding="10dp"
+            android:hint="New Password"
+            android:inputType="textPassword"
+            android:padding="15dp"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+
+            android:textCursorDrawable="@drawable/cursor_white"
+            android:theme="@style/TextInputLayoutAppearance"
+            app:layout_constraintEnd_toEndOf="@+id/etCurrentPassword"
+            app:layout_constraintStart_toStartOf="@+id/etCurrentPassword"
+            app:layout_constraintTop_toBottomOf="@+id/etCurrentPassword" />
+
+        <EditText
+            android:id="@+id/etConfirmpassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:drawableEnd="@drawable/ic_action_eye_off"
+            android:drawablePadding="10dp"
+            android:hint=" Confirm Password"
+            android:inputType="textPassword"
+            android:padding="15dp"
+            android:textSize="16sp"
+
+            android:textColor="@color/white"
+            android:textCursorDrawable="@drawable/cursor_primary"
+            android:theme="@style/TextInputLayoutAppearance"
+            app:layout_constraintEnd_toEndOf="@+id/etNewpassword"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/etNewpassword"
+            app:layout_constraintTop_toBottomOf="@+id/etNewpassword" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/home_admob"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_weight="0"
+        app:adSize="SMART_BANNER"
+        app:adUnitId="@string/app_id"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="w,1:1"
+        tools:layout_editor_absoluteX="42dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

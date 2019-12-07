@@ -6,25 +6,26 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbar"
+    android:id="@+id/appbar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="4dp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="4dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:theme="@style/AppTheme"
+        app:layout_scrollFlags="scroll|enterAlways|snap"
+        app:title="Settings"
+        app:titleTextColor="@color/white" />
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppTheme"
-            app:layout_scrollFlags="scroll|enterAlways|snap"
-            app:title="Settings"
-            app:titleTextColor="@color/white" />
+</com.google.android.material.appbar.AppBarLayout>
 
-    </com.google.android.material.appbar.AppBarLayout>
+
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -37,7 +38,6 @@
         android:orientation="vertical"
         android:padding="8dp"
         android:background="@android:drawable/picture_frame"
-
         app:layout_constraintTop_toBottomOf="@+id/appbar"
         tools:layout_editor_absoluteX="8dp">
 
@@ -107,7 +107,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:layout_marginBottom="2dp"
-            android:textColor="@color/gray_bg"
+            android:textColor="@color/gray"
             android:fontFamily="@font/montserrat"
             android:text=" All activity Notifications "
             app:layout_constraintTop_toBottomOf="@+id/textInput_email"
@@ -125,7 +125,7 @@
             android:layout_marginTop="2dp"
             android:layout_marginBottom="2dp"
             android:fontFamily="@font/montserrat"
-            android:textColor="@color/gray_bg"
+            android:textColor="@color/gray"
 
             android:text=" Only notifications about new messages"
             app:layout_constraintTop_toBottomOf="@+id/switchEmailAllNotify"
@@ -172,7 +172,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:layout_marginBottom="52dp"
-            android:textColor="@color/gray_bg"
+            android:textColor="@color/gray"
             android:fontFamily="@font/montserrat"
             android:text=" SMS notifications about new messages"
             app:layout_constraintTop_toBottomOf="@+id/textInput_phone"
@@ -181,6 +181,54 @@
 
 
         </Switch>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constrainlayout_help"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/switchSmsMsgNotify"
+            tools:layout_editor_absoluteX="8dp">
+
+            <TextView
+                android:id="@+id/tv_help"
+                style="@style/text_view_style1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:drawableStart="@drawable/ic_help_black_24dp"
+                android:drawablePadding="5dp"
+                android:fontFamily="@font/montserrat"
+                android:padding="2dp"
+                android:text="Help"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintDimensionRatio="w,1:1"
+                tools:layout_editor_absoluteX="8dp"
+                tools:ignore="MissingConstraints" />
+
+            <TextView
+                style="@style/text_view_style1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:drawablePadding="5dp"
+                android:fontFamily="@font/montserrat"
+                android:padding="2dp"
+                android:text=" FAQ,contact us,privacy policy"
+                android:textColor="@color/gray"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="w,1:1"
+                app:layout_constraintTop_toBottomOf="@+id/tv_help"
+                tools:layout_editor_absoluteX="8dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

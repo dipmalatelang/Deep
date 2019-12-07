@@ -4,7 +4,9 @@ package com.travel.cotravel.fragment.account;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +14,12 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+
 import com.bumptech.glide.Glide;
+
+import com.facebook.login.LoginManager;
+import com.google.firebase.auth.FirebaseAuth;
+import com.pkmmte.view.CircularImageView;
 import com.travel.cotravel.BaseFragment;
 import com.travel.cotravel.R;
 import com.travel.cotravel.fragment.account.profile.ui.ChangePasswordActivity;
@@ -23,8 +30,6 @@ import com.travel.cotravel.fragment.account.profile.ui.SettingsActivity;
 import com.travel.cotravel.fragment.account.profile.ui.TrashActivity;
 import com.travel.cotravel.fragment.account.profile.verify.EditPhoneActivity;
 import com.travel.cotravel.login.LoginActivity;
-import com.facebook.login.LoginManager;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Objects;
 
@@ -76,7 +81,7 @@ public class MyProfileFragment extends BaseFragment {
     @BindView(R.id.scrollView)
     ScrollView scrollView;
     private SharedPreferences sharedPreferences;
-    private String name, imageUrl, age, gender;
+    private String name, imageUrl, age, gender,phone;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -98,6 +103,17 @@ public class MyProfileFragment extends BaseFragment {
         if (sharedPreferences.contains("ImageUrl")) {
             imageUrl = (sharedPreferences.getString("ImageUrl", ""));
             Glide.with(getActivity()).load(imageUrl).placeholder(R.drawable.whitewallpapar).into(ivImage);
+
+        }
+
+        if (sharedPreferences.contains("Phone")) {
+            phone = (sharedPreferences.getString("Phone", ""));
+            if (!phone.equalsIgnoreCase("")) {
+                tvVerifyAcc.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_verified_user_black_24dp, 0);
+            }
+            else {
+                tvVerifyAcc.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_keyboard_arrow_right_black_24dp, 0);
+            }
 
         }
 

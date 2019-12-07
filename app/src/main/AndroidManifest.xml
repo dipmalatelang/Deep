@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.travel.cotravel">
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
@@ -10,10 +9,13 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme">
 
         <activity android:name="com.travel.cotravel.login.LoginActivity"
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+
             android:theme="@style/noToolbar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,69 +24,120 @@
         </activity>
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
+
             android:value="@string/app_id"/>
 
         <activity
             android:name="com.travel.cotravel.MainActivity"
+            android:screenOrientation="portrait"
+
             android:theme="@style/noToolbar"
             android:launchMode="singleTask"
             android:windowSoftInputMode="stateHidden"/>
         <activity android:name="com.travel.cotravel.fragment.member.MembersActivity"
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+
             android:label="Members"/>
 
         <activity android:name="com.travel.cotravel.fragment.account.profile.ui.TrashActivity"
             android:label="Trash"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask"
             android:windowSoftInputMode="stateHidden"/>
 
         <activity android:name="com.travel.cotravel.fragment.account.profile.ui.PhotoRequestActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask"/>
+
+        <activity android:name="com.travel.cotravel.fragment.account.profile.ui.PrivacyPolicyHelp"
+            android:screenOrientation="portrait"
+
+            android:theme="@style/noToolbar"
+            android:launchMode="singleTask"/>
+
 
         <activity android:name="com.travel.cotravel.fragment.account.profile.ui.ViewPhotoRequestActivity"
             android:parentActivityName="com.travel.cotravel.fragment.account.profile.ui.PhotoRequestActivity"
+            android:screenOrientation="portrait"
+
+            android:launchMode="singleTask"/>
+
+        <activity android:name=".fragment.account.profile.ui.ContactUs"
+            android:screenOrientation="portrait"
+
+            android:launchMode="singleTask"/>
+
+        <activity android:name="com.travel.cotravel.fragment.account.profile.ui.PrivacyPolicy"
+            android:screenOrientation="portrait"
+
+            android:launchMode="singleTask"/>
+
+        <activity android:name=".fragment.account.profile.ui.Terms_and_Condition"
+            android:screenOrientation="portrait"
+
             android:launchMode="singleTask"/>
 
         <activity android:name="com.travel.cotravel.fragment.account.profile.ui.SettingsActivity"
+            android:screenOrientation="portrait"
+
             android:launchMode="singleTask"
             android:theme="@style/noToolbar"
             android:parentActivityName="com.travel.cotravel.MainActivity"/>
 
+
         <activity
             android:name="com.travel.cotravel.fragment.trip.FilterTripActivity"
+            android:screenOrientation="portrait"
+
             android:parentActivityName="com.travel.cotravel.MainActivity"
             android:launchMode="singleTask"
             android:theme="@style/noToolbar" />
 
         <activity android:name="com.travel.cotravel.fragment.account.profile.verify.EditPhoneActivity"
+            android:screenOrientation="portrait"
+
             android:launchMode="singleTask"
             android:parentActivityName="com.travel.cotravel.MainActivity"/>
 
         <activity android:name="com.travel.cotravel.fragment.account.profile.verify.VerifyPhoneActivity"
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+
             android:parentActivityName="com.travel.cotravel.MainActivity"/>
 
         <activity
             android:name="com.travel.cotravel.fragment.trip.AddTripActivity"
             android:parentActivityName="com.travel.cotravel.MainActivity"
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+
             android:theme="@style/noToolbar"/>
 
         <activity
             android:name="com.travel.cotravel.fragment.chat.MessageActivity"
+            android:screenOrientation="portrait"
+
             android:parentActivityName="com.travel.cotravel.MainActivity"
             android:launchMode="singleTask"
             android:theme="@style/noToolbar" />
         <activity
             android:name="com.travel.cotravel.fragment.trip.EditProfileActivity"
+            android:screenOrientation="portrait"
+
             android:label="Profile Information"
             android:launchMode="singleTask"
             android:parentActivityName="com.travel.cotravel.MainActivity"
+
             android:theme="@style/noToolbar" />
         <activity android:name="com.travel.cotravel.login.RegisterActivity"
+            android:screenOrientation="portrait"
+
             android:launchMode="singleTask"
             android:theme="@style/noToolbar"/>
         <activity android:name="com.travel.cotravel.login.ResetPasswordActivity"
+            android:screenOrientation="portrait"
+
             android:launchMode="singleTask"/>
 
         <meta-data
@@ -98,11 +151,13 @@
         <activity
             android:name="com.facebook.FacebookActivity"
             android:launchMode="singleTask"
+
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
         <activity
             android:name="com.facebook.CustomTabActivity"
             android:launchMode="singleTask"
+
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -117,20 +172,29 @@
 
         <activity android:name="com.travel.cotravel.fragment.account.profile.ui.ProfileActivity"
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"
             android:theme="@style/noToolbar" >
 
         </activity>
         <activity android:name="com.travel.cotravel.fragment.account.profile.ui.EditPhotoActivity"
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+
             android:label="Edit Photo"/>
         <activity android:name="com.travel.cotravel.fragment.account.profile.ui.ChangePasswordActivity"
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+
             android:windowSoftInputMode="stateHidden"/>
         <activity android:name="com.travel.cotravel.fragment.account.profile.ui.ChangePrefActivity"
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+
             android:theme="@style/noToolbar"/>
 
         <activity android:name="com.travel.cotravel.fragment.account.profile.ui.FacebookImageActivity"
+            android:screenOrientation="portrait"
+
             android:launchMode="singleTask"/>
 
         <service android:name="com.travel.cotravel.fragment.chat.notification.MyFirebaseIdService"

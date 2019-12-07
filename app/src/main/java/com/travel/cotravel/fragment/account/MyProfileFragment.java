@@ -109,7 +109,7 @@ public class MyProfileFragment extends BaseFragment {
         if (sharedPreferences.contains("Phone")) {
             phone = (sharedPreferences.getString("Phone", ""));
             if (!phone.equalsIgnoreCase("")) {
-                tvVerifyAcc.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_verified_user_black_24dp, 0);
+                tvVerifyAcc.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_verified_user_white_24dp, 0);
             }
             else {
                 tvVerifyAcc.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_keyboard_arrow_right_black_24dp, 0);

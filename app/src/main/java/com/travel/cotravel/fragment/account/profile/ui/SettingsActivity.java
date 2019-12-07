@@ -9,6 +9,7 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -149,6 +150,7 @@ public class SettingsActivity extends BaseActivity implements CompoundButton.OnC
 
     @OnClick(R.id.constrainlayout_help)
     public void onViewClicked() {
-        startActivity(new Intent(this,PrivacyPolicyHelp.class));
+        //startActivity(new Intent(this,PrivacyPolicyHelp.class));
+        Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT).show();
     }
 }

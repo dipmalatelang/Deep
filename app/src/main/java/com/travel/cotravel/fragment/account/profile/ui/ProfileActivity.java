@@ -5,7 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -21,6 +21,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import com.facebook.login.LoginManager;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.travel.cotravel.BaseActivity;
 import com.travel.cotravel.R;
 import com.travel.cotravel.fragment.account.profile.adapter.CustomAdapter;
@@ -34,17 +45,6 @@ import com.travel.cotravel.fragment.trip.module.TripList;
 import com.travel.cotravel.fragment.trip.module.User;
 import com.travel.cotravel.fragment.visitor.UserImg;
 import com.travel.cotravel.login.LoginActivity;
-import com.facebook.login.LoginManager;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.material.chip.Chip;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -57,6 +57,7 @@ import static com.travel.cotravel.Constants.PhotoRequestInstance;
 import static com.travel.cotravel.Constants.PicturesInstance;
 import static com.travel.cotravel.Constants.TripsInstance;
 import static com.travel.cotravel.Constants.UsersInstance;
+
 
 public class ProfileActivity extends BaseActivity {
 
@@ -493,6 +494,7 @@ public class ProfileActivity extends BaseActivity {
 
 //                                        privateValue = 1;
 
+                                            Log.i(TAG, "onDataChange: " + uploads.size());
                                             if (uploads.size() > 0) {
                                                 adapter = new CustomAdapter(ProfileActivity.this, uid, uploads, gender);
                                                 viewPager.setAdapter(adapter);
@@ -552,7 +554,7 @@ public class ProfileActivity extends BaseActivity {
 
 //                                        privateValue = 0;
 
-
+                                            Log.i(TAG, "onDataChange: " + uploads.size());
                                             if (uploads.size() > 0) {
                                                 adapter = new CustomAdapter(ProfileActivity.this, uid, uploads, gender);
                                                 viewPager.setAdapter(adapter);
@@ -611,7 +613,7 @@ public class ProfileActivity extends BaseActivity {
 
 //                                        privateValue = 0;
 
-
+                                        Log.i(TAG, "onDataChange: " + uploads.size());
                                         if (uploads.size() > 0) {
                                             adapter = new CustomAdapter(ProfileActivity.this, uid, uploads, gender);
                                             viewPager.setAdapter(adapter);
@@ -675,7 +677,7 @@ public class ProfileActivity extends BaseActivity {
 
 //                            privateValue = 0;
 
-
+                            Log.i(TAG, "onDataChange: " + uploads.size());
                             if (uploads.size() > 0) {
                                 adapter = new CustomAdapter(ProfileActivity.this, uid, uploads, gender);
                                 viewPager.setAdapter(adapter);
@@ -834,14 +836,14 @@ public class ProfileActivity extends BaseActivity {
                             PhotoRequestInstance.push().setValue(new Permit(fuser.getUid(), tripL.getUser().getId(), 0, false, false));
                             notify = true;
                             if (notify) {
-                                sendNotifiaction(fuser.getUid(), tripL.getUser().getId(), fusername , "has requested for private photo");
+                                sendNotifiaction(fuser.getUid(), tripL.getUser().getId(), fusername , "has requested for private photo","PhotoRequest");
                             }
                             notify=false;
                         } else if (userL != null) {
                             PhotoRequestInstance.push().setValue(new Permit(fuser.getUid(), userL.getUser().getId(), 0, false, false));
                             notify = true;
                             if (notify) {
-                                sendNotifiaction(fuser.getUid(), userL.getUser().getId(), fusername , "has requested for private photo");
+                                sendNotifiaction(fuser.getUid(), userL.getUser().getId(), fusername , "has requested for private photo","PhotoRequest");
                             }
                             notify=false;
                         }
@@ -931,7 +933,7 @@ public class ProfileActivity extends BaseActivity {
                         tripL.getUserImg().setFav(1);
                         ivFavUser.setImageResource(R.drawable.ic_action_fav_remove);
                         if (notify) {
-                            sendNotifiaction(fuser.getUid(), tripL.getUser().getId(), fusername, "has added you to Favourite");
+                            sendNotifiaction(fuser.getUid(), tripL.getUser().getId(), fusername, "has added you to Favourite","Favourite");
                         }
                         notify = false;
                     }
@@ -946,7 +948,7 @@ public class ProfileActivity extends BaseActivity {
                         userL.setFav(1);
                         ivFavUser.setImageResource(R.drawable.ic_action_fav_remove);
                         if (notify) {
-                            sendNotifiaction(fuser.getUid(), userL.getUser().getId(), fusername, "has added you to Favourite");
+                            sendNotifiaction(fuser.getUid(), userL.getUser().getId(), fusername, "has added you to Favourite","Favourite");
                         }
                         notify = false;
                     }

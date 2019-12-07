@@ -4,7 +4,7 @@ package com.travel.cotravel.fragment.account;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,7 +19,6 @@ import com.bumptech.glide.Glide;
 
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
-import com.pkmmte.view.CircularImageView;
 import com.travel.cotravel.BaseFragment;
 import com.travel.cotravel.R;
 import com.travel.cotravel.fragment.account.profile.ui.ChangePasswordActivity;
@@ -30,6 +29,7 @@ import com.travel.cotravel.fragment.account.profile.ui.SettingsActivity;
 import com.travel.cotravel.fragment.account.profile.ui.TrashActivity;
 import com.travel.cotravel.fragment.account.profile.verify.EditPhoneActivity;
 import com.travel.cotravel.login.LoginActivity;
+
 
 import java.util.Objects;
 

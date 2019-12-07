@@ -11,11 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.travel.cotravel.BaseActivity;
-import com.travel.cotravel.R;
-import com.travel.cotravel.fragment.account.profile.module.Permit;
-import com.travel.cotravel.fragment.account.profile.verify.ViewPhotoRequestAdapter;
-import com.travel.cotravel.fragment.visitor.UserImg;
+
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
@@ -26,6 +22,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.travel.cotravel.BaseActivity;
+import com.travel.cotravel.R;
+import com.travel.cotravel.fragment.account.profile.module.Permit;
+import com.travel.cotravel.fragment.account.profile.verify.ViewPhotoRequestAdapter;
+import com.travel.cotravel.fragment.visitor.UserImg;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,6 +37,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.travel.cotravel.Constants.PhotoRequestInstance;
+
 
 public class ViewPhotoRequestActivity extends BaseActivity {
     @BindView(R.id.rv_view_photo_request)
@@ -81,7 +84,7 @@ public class ViewPhotoRequestActivity extends BaseActivity {
                 acceptPhotoRequest(id, 1);
                 notify = true;
                 if (notify) {
-                    sendNotifiaction(fuser.getUid(), id, fusername, "has accepted your photo request");
+                    sendNotifiaction(fuser.getUid(), id, fusername, "has accepted your photo request","GivenPermit");
                 }
                 notify=false;
                 Objects.requireNonNull(userList).remove(pos);

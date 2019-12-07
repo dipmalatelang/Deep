@@ -6,7 +6,7 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
-
+import android.util.Log;
 import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.View;
@@ -17,11 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.travel.cotravel.BaseActivity;
-import com.travel.cotravel.R;
-import com.travel.cotravel.fragment.account.profile.module.Upload;
-import com.travel.cotravel.fragment.account.profile.verify.EditPhoneActivity;
-import com.travel.cotravel.fragment.trip.module.User;
+
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -37,6 +33,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.travel.cotravel.BaseActivity;
+import com.travel.cotravel.R;
+import com.travel.cotravel.fragment.account.profile.module.Upload;
+import com.travel.cotravel.fragment.account.profile.verify.EditPhoneActivity;
+import com.travel.cotravel.fragment.trip.module.User;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -47,6 +48,7 @@ import butterknife.OnClick;
 
 import static com.travel.cotravel.Constants.PicturesInstance;
 import static com.travel.cotravel.Constants.UsersInstance;
+
 
 //import com.example.tgapplication.trips.TripActivity;
 
@@ -84,18 +86,18 @@ public class LoginActivity extends BaseActivity implements  View.OnKeyListener {
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
-        SharedPreferences sharedPreferences =
+     /*   SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(this);
         // Check if we need to display our OnboardingFragment
         if (!sharedPreferences.getBoolean("UserFirst", false)) {
             // The user hasn't seen the OnboardingFragment yet, so show it
-        /*    notify = true;
+        *//*    notify = true;
             if (notify) {
                 sendNotifiaction(fuser.getUid(), tripL.getUser().getId(), fusername , "has requested for private photo");
             }
-            notify=false;*/
+            notify=false;*//*
         }
-
+*/
 
         tvRegister.setPaintFlags(tvRegister.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         tvRegister.setText(getResources().getString(R.string.register));
@@ -104,28 +106,26 @@ public class LoginActivity extends BaseActivity implements  View.OnKeyListener {
         inputPassword.setOnTouchListener((view, motionEvent) -> showOrHidePwd(motionEvent, inputPassword));
         inputPassword.setOnKeyListener(this);
 
-
-
 //        value = getIntent().getExtras().getString("nextActivity");
 
         loginButton.setReadPermissions("email", "public_profile");
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-
-
+                Log.d("Tiger", "facebook:onSuccess:" + loginResult);
+                Log.d("Tiger", "facebook:token:" + loginResult.getAccessToken());
                 handleFacebookAccessToken(loginResult.getAccessToken().getToken());
             }
 
             @Override
             public void onCancel() {
-
+                Log.d("Tiger", "facebook:onCancel");
                 // ...
             }
 
             @Override
             public void onError(FacebookException error) {
-
+                Log.d("Tiger", "facebook:onError", error);
                 // ...
             }
         });
@@ -144,16 +144,16 @@ public class LoginActivity extends BaseActivity implements  View.OnKeyListener {
     private void handleFacebookAccessToken(String token) {
         showProgressDialog();
         AuthCredential credential = FacebookAuthProvider.getCredential(token);
-
+        Log.d("Tiger", "" + credential);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-
+                        Log.d("Tiger", "handleFacebookAccessToken:" + task.isSuccessful());
                         if (task.isSuccessful()) {
 
                             // Sign in success, update UI with the signed-in user's information
-
+                            Log.d("Tiger", "signInWithCredential:success");
                             dismissProgressDialog();
 
                             UsersInstance.child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -228,6 +228,9 @@ public class LoginActivity extends BaseActivity implements  View.OnKeyListener {
     }
 
 
+    private void phoneLogin() {
+
+    }
 
 
     private void emailLogin(String txt_email, String txt_password) {
@@ -239,7 +242,7 @@ public class LoginActivity extends BaseActivity implements  View.OnKeyListener {
                             dismissProgressDialog();
                             updateUI(mAuth.getCurrentUser());
 
-
+                            Log.d(TAG, "onComplete: " + txt_email + " " + txt_password);
                             saveLoginDetails(txt_email, txt_password);
 
 //                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -269,7 +272,9 @@ public class LoginActivity extends BaseActivity implements  View.OnKeyListener {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_register:
+                //                Log.i("Send while Login", value);
                 Intent loginIntent = new Intent(LoginActivity.this, RegisterActivity.class);
+//                loginIntent.putExtra("nextActivity", value);
                 startActivity(loginIntent);
 
                 break;
@@ -293,7 +298,7 @@ public class LoginActivity extends BaseActivity implements  View.OnKeyListener {
                     dismissProgressDialog();
                     snackBar(constrainlayout, "please enter valid email address");
                 } else {
-
+                    Log.d(TAG, "onComplete1: " + txt_email + " " + txt_password);
 //                    hideKeyboard(this);
                     emailLogin(txt_email, txt_password);
 
@@ -311,7 +316,7 @@ public class LoginActivity extends BaseActivity implements  View.OnKeyListener {
                 }*/
                 break;
             case R.id.btn_phone_login:
-                startActivity(new Intent(this,EditPhoneActivity.class));
+                startActivity(new Intent(this, EditPhoneActivity.class));
                 break;
         }
     }

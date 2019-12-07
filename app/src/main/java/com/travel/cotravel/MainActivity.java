@@ -1,6 +1,5 @@
 package com.travel.cotravel;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,16 +13,23 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
+
+import com.facebook.login.LoginManager;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.travel.cotravel.fragment.account.MyProfileFragment;
 import com.travel.cotravel.fragment.chat.ChatFragment;
 import com.travel.cotravel.fragment.favourite.FavouriteFragment;
 import com.travel.cotravel.fragment.trip.TripFragment;
 import com.travel.cotravel.fragment.visitor.VisitorFragment;
 import com.travel.cotravel.login.LoginActivity;
-import com.facebook.login.LoginManager;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+
+import java.util.HashMap;
+
+import static com.travel.cotravel.Constants.UsersInstance;
+
 
 public class MainActivity extends BaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
@@ -61,7 +67,22 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     @Override
     protected void onResume() {
         super.onResume();
+        status("online");
         getBackRunningFragment();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        status("offline");
+    }
+
+    private void status(String status) {
+
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("status", status);
+
+        UsersInstance.child(fUser.getUid()).updateChildren(hashMap);
     }
 
     private void getBackRunningFragment()
@@ -194,7 +215,6 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
                 finish();
                 startActivity(new Intent(this, LoginActivity.class));
                 snackBar(container, "Logout");
-
                 break;
 
         }

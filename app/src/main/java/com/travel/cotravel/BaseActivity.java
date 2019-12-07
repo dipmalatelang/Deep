@@ -5,12 +5,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
-
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,8 +26,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
-import com.travel.cotravel.MainActivity;
-import com.travel.cotravel.ProgressActivity;
 import com.travel.cotravel.fragment.account.profile.module.Upload;
 import com.travel.cotravel.fragment.chat.module.APIService;
 import com.travel.cotravel.fragment.chat.module.Chat;
@@ -224,11 +223,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         ProfileVisitorInstance.child(id).child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.i("TAG", "onDataChange: "+dataSnapshot.getChildrenCount());
                 if (!dataSnapshot.exists()) {
                     ProfileVisitorInstance.child(id).child(uid).child("id").setValue(uid);
                     notify = true;
                     if (notify) {
-                        sendNotifiaction(uid, id, name , "has visited your profile");
+                        sendNotifiaction(uid, id, name , "has visited your profile", "ProfileVisitor");
                     }
                     notify=false;
 //                    Toast.makeText(getActivity(), "First Visit", Toast.LENGTH_SHORT).show();
@@ -242,14 +242,14 @@ public abstract class BaseActivity extends AppCompatActivity {
         });
     }
 
-    public void sendNotifiaction(String uid, String userid, final String username, final String message) {
+    public void sendNotifiaction(String uid, String userid, final String username, final String message, String cxtString) {
         Query query = TokensInstance.orderByKey().equalTo(userid);
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Token token = snapshot.getValue(Token.class);
-                    Data data = new Data(uid, R.mipmap.ic_launcher, username + " " + message, "Notification",
+                    Data data = new Data(uid, R.mipmap.ic_launcher, username + " " + message, "Notification", cxtString,
                             userid);
 
                     Sender sender = new Sender(data, Objects.requireNonNull(token).getToken());
@@ -280,14 +280,14 @@ public abstract class BaseActivity extends AppCompatActivity {
         });
     }
 
-    public void sendMsgNotifiaction(String uid, String userid, String receiver, final String username, final String message) {
+    public void sendMsgNotifiaction(String uid, String userid, String receiver, final String username, final String message, String cxtString) {
         Query query = TokensInstance.orderByKey().equalTo(receiver);
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Token token = snapshot.getValue(Token.class);
-                    Data data = new Data(uid, R.mipmap.ic_launcher, username + ": " + message, "New Message",
+                    Data data = new Data(uid, R.mipmap.ic_launcher, username + ": " + message, "New Message", cxtString,
                             userid);
 
                     Sender sender = new Sender(data, Objects.requireNonNull(token).getToken());
@@ -346,7 +346,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
 
                 if(user!=null)
-                    saveDetailsLater(user);
+                saveDetailsLater(user);
             }
 
             @Override

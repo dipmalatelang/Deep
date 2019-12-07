@@ -14,11 +14,14 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
-import com.travel.cotravel.fragment.chat.MessageActivity;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.travel.cotravel.MainActivity;
+import com.travel.cotravel.fragment.account.profile.ui.PhotoRequestActivity;
+import com.travel.cotravel.fragment.chat.MessageActivity;
 
 import java.util.Objects;
 
@@ -36,7 +39,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
 
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (firebaseUser != null && Objects.requireNonNull(sented).equals(firebaseUser.getUid())){
+        if (firebaseUser != null && Objects.requireNonNull(sented).equals(firebaseUser.getUid())) {
             if (!currentUser.equals(user)) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     sendOreoNotification(remoteMessage);
@@ -47,14 +50,24 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         }
     }
 
-    private void sendOreoNotification(RemoteMessage remoteMessage){
+    private void sendOreoNotification(RemoteMessage remoteMessage) {
         String user = remoteMessage.getData().get("user");
         String icon = remoteMessage.getData().get("icon");
         String title = remoteMessage.getData().get("title");
         String body = remoteMessage.getData().get("body");
+        String pageview = remoteMessage.getData().get("pageview");
 
         int j = Integer.parseInt(Objects.requireNonNull(user).replaceAll("[\\D]", ""));
-        Intent intent = new Intent(this, MessageActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
+        if (pageview != null) {
+            if (pageview.equalsIgnoreCase("Message")) {
+                intent = new Intent(this, MessageActivity.class);
+            } else if (pageview.equalsIgnoreCase("PhotoRequest")||pageview.equalsIgnoreCase("GivenPermit")) {
+                intent = new Intent(this, PhotoRequestActivity.class);
+            } else {
+                intent = new Intent(this, MainActivity.class);
+            }
+        }
         Bundle bundle = new Bundle();
         bundle.putString("userid", user);
         intent.putExtras(bundle);
@@ -67,7 +80,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
                 defaultSound, icon);
 
         int i = 0;
-        if (j > 0){
+        if (j > 0) {
             i = j;
         }
 
@@ -81,9 +94,19 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         String icon = remoteMessage.getData().get("icon");
         String title = remoteMessage.getData().get("title");
         String body = remoteMessage.getData().get("body");
+        String pageview = remoteMessage.getData().get("pageview");
 
         int j = Integer.parseInt(Objects.requireNonNull(user).replaceAll("[\\D]", ""));
-        Intent intent = new Intent(this, MessageActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
+        if (pageview != null) {
+            if (pageview.equalsIgnoreCase("Message")) {
+                intent = new Intent(this, MessageActivity.class);
+            } else if (pageview.equalsIgnoreCase("PhotoRequest")||pageview.equalsIgnoreCase("GivenPermit")) {
+                intent = new Intent(this, PhotoRequestActivity.class);
+            } else {
+                intent = new Intent(this, MainActivity.class);
+            }
+        }
         Bundle bundle = new Bundle();
         bundle.putString("userid", user);
         intent.putExtras(bundle);
@@ -98,10 +121,10 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
                 .setAutoCancel(true)
                 .setSound(defaultSound)
                 .setContentIntent(pendingIntent);
-        NotificationManager noti = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager noti = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         int i = 0;
-        if (j > 0){
+        if (j > 0) {
             i = j;
         }
 

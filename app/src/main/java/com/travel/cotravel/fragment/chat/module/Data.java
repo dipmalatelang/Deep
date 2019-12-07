@@ -5,16 +5,26 @@ public class Data {
     private int icon;
     private String body;
     private String title;
+    private String pageview;
     private String sented;
 
-    public Data(String user, int icon, String body, String title, String sented) {
+    public Data(String user, int icon, String body, String title, String pageview, String sented) {
         this.user = user;
         this.icon = icon;
         this.body = body;
         this.title = title;
+        this.pageview=pageview;
         this.sented = sented;
     }
 
+
+    public String getPageview() {
+        return pageview;
+    }
+
+    public void setPageview(String pageview) {
+        this.pageview = pageview;
+    }
 
     public String getUser() {
         return user;

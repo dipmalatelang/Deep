@@ -2,28 +2,27 @@ package com.travel.cotravel.fragment.account.profile.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.travel.cotravel.BaseActivity;
-import com.travel.cotravel.R;
-
-
-import com.travel.cotravel.fragment.account.profile.module.Permit;
-import com.travel.cotravel.fragment.account.profile.module.Upload;
-import com.travel.cotravel.fragment.trip.module.User;
-import com.travel.cotravel.fragment.visitor.UserImg;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
+import com.travel.cotravel.BaseActivity;
+import com.travel.cotravel.R;
+import com.travel.cotravel.fragment.account.profile.module.Permit;
+import com.travel.cotravel.fragment.account.profile.module.Upload;
+import com.travel.cotravel.fragment.trip.module.User;
+import com.travel.cotravel.fragment.visitor.UserImg;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -76,7 +75,9 @@ public class PhotoRequestActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_photo_rqst:
+                Log.i(TAG, "onViewClicked: "+viewPhotoRequestList.size());
                 if (viewPhotoRequestList.size() > 0) {
+                    photoRqstCount.setVisibility(View.GONE);
                     Intent intent1 = new Intent(PhotoRequestActivity.this, ViewPhotoRequestActivity.class);
                     intent1.putExtra("intentType", 1);
                     intent1.putExtra("userList", new Gson().toJson(viewPhotoRequestList));
@@ -84,10 +85,12 @@ public class PhotoRequestActivity extends BaseActivity {
                 } else {
                     snackBar(clPhotoRequest, "No Data");
                 }
-
                 break;
             case R.id.btn_photo_permits:
+                Log.i(TAG, "onViewClicked: "+photoPermitsList.size());
+
                 if (photoPermitsList.size() > 0) {
+                    photoPermitsCount.setVisibility(View.GONE);
                     Intent intent2 = new Intent(PhotoRequestActivity.this, ViewPhotoRequestActivity.class);
                     intent2.putExtra("intentType", 2);
                     intent2.putExtra("userList", new Gson().toJson(photoPermitsList));
@@ -97,7 +100,10 @@ public class PhotoRequestActivity extends BaseActivity {
                 }
                 break;
             case R.id.btn_given_permits:
+                Log.i(TAG, "onViewClicked: "+givenPermitsList.size());
+
                 if (givenPermitsList.size() > 0) {
+                    givenPermitsCount.setVisibility(View.GONE);
                     Intent intent3 = new Intent(PhotoRequestActivity.this, ViewPhotoRequestActivity.class);
                     intent3.putExtra("intentType", 3);
                     intent3.putExtra("userList", new Gson().toJson(givenPermitsList));
@@ -113,14 +119,20 @@ public class PhotoRequestActivity extends BaseActivity {
         PhotoRequestInstance.orderByChild("receiver").equalTo(fuser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                viewPhotoRequestList.clear();
+                viewPhotoRequestList=new ArrayList<>();
                 prcount=0;
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Permit permit = ds.getValue(Permit.class);
+
                     if (Objects.requireNonNull(permit).getStatus() == 0) {
+                        if(!permit.isReceiverCheck())
+                        {
+                            prcount++;
+                        }
                         UsersInstance.child(permit.getSender()).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
                                 User user = dataSnapshot.getValue(User.class);
                                 if(user!=null)
                                 {
@@ -144,22 +156,6 @@ public class PhotoRequestActivity extends BaseActivity {
                                                     if (snapshot.hasChild(user.getId())) {
                                                         userImg.setFav(1);
                                                     }
-                                                    viewPhotoRequestList.add(userImg);
-
-                                                    if(!permit.isReceiverCheck())
-                                                    {
-                                                        prcount++;
-                                                    }
-
-                                                    if(prcount>0)
-                                                    {
-
-                                                        photoRqstCount.setVisibility(View.VISIBLE);
-                                                        photoRqstCount.setText(String.valueOf(prcount));
-                                                    }
-                                                    else {
-                                                        photoRqstCount.setVisibility(View.GONE);
-                                                    }
                                                 }
 
                                                 @Override
@@ -172,7 +168,7 @@ public class PhotoRequestActivity extends BaseActivity {
                                         public void onCancelled(@NonNull DatabaseError databaseError) {
                                         }
                                     });
-
+                                    viewPhotoRequestList.add(userImg);
                                 }
                             }
 
@@ -180,6 +176,13 @@ public class PhotoRequestActivity extends BaseActivity {
                             public void onCancelled(@NonNull DatabaseError databaseError) {
                             }
                         });
+
+                        if(prcount>0)
+                        {
+                            Log.i(TAG, "onCompleted: viewPhotoRequestList " + prcount);
+                            photoRqstCount.setVisibility(View.VISIBLE);
+                            photoRqstCount.setText(String.valueOf(prcount));
+                        }
                     }
                 }
             }
@@ -194,11 +197,18 @@ public class PhotoRequestActivity extends BaseActivity {
         PhotoRequestInstance.orderByChild("sender").equalTo(fuser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                photoPermitsList.clear();
+                photoPermitsList=new ArrayList<>();
                 ppcount=0;
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    Log.i(TAG, "onDataChange: "+dataSnapshot.getChildrenCount());
                     Permit permit = ds.getValue(Permit.class);
+
                     if (Objects.requireNonNull(permit).getStatus() == 1) {
+                        if(!permit.isSenderCheck())
+                        {
+                            ppcount++;
+                        }
+
                         UsersInstance.child(permit.getReceiver()).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -224,24 +234,6 @@ public class PhotoRequestActivity extends BaseActivity {
                                                     if (snapshot.hasChild(user.getId())) {
                                                         userImg.setFav(1);
                                                     }
-                                                    photoPermitsList.add(userImg);
-
-                                                    if(!permit.isSenderCheck())
-                                                    {
-                                                        ppcount++;
-                                                    }
-
-                                                    if(ppcount>0)
-                                                    {
-
-                                                        photoPermitsCount.setVisibility(View.VISIBLE);
-                                                        photoPermitsCount.setText(String.valueOf(ppcount));
-                                                    }
-                                                    else {
-                                                        photoPermitsCount.setVisibility(View.GONE);
-
-                                                    }
-
 
                                                 }
 
@@ -257,6 +249,7 @@ public class PhotoRequestActivity extends BaseActivity {
 
                                         }
                                     });
+                                    photoPermitsList.add(userImg);
                                 }
                             }
 
@@ -265,6 +258,13 @@ public class PhotoRequestActivity extends BaseActivity {
 
                             }
                         });
+
+                        if(ppcount>0)
+                        {
+                            Log.i(TAG, "onCompleted: photoPermitsList " + ppcount);
+                            photoPermitsCount.setVisibility(View.VISIBLE);
+                            photoPermitsCount.setText(String.valueOf(ppcount));
+                        }
                     }
 
                 }
@@ -272,7 +272,7 @@ public class PhotoRequestActivity extends BaseActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Log.i(TAG, "onCancelled: " + databaseError.getMessage());
             }
         });
     }
@@ -281,11 +281,15 @@ public class PhotoRequestActivity extends BaseActivity {
         PhotoRequestInstance.orderByChild("receiver").equalTo(fuser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                givenPermitsList.clear();
+                givenPermitsList=new ArrayList<>();
                 gpcount=0;
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Permit permit = ds.getValue(Permit.class);
                     if (Objects.requireNonNull(permit).getStatus() == 1) {
+                        if(!permit.isReceiverCheck())
+                        {
+                            gpcount++;
+                        }
                         UsersInstance.child(permit.getSender()).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -311,22 +315,7 @@ public class PhotoRequestActivity extends BaseActivity {
                                                     if (snapshot.hasChild(user.getId())) {
                                                         userImg.setFav(1);
                                                     }
-                                                    givenPermitsList.add(userImg);
 
-                                                    if(!permit.isReceiverCheck())
-                                                    {
-                                                        gpcount++;
-                                                    }
-
-                                                    if(gpcount>0)
-                                                    {
-
-                                                        givenPermitsCount.setVisibility(View.VISIBLE);
-                                                        givenPermitsCount.setText(String.valueOf(gpcount));
-                                                    }
-                                                    else {
-                                                        givenPermitsCount.setVisibility(View.GONE);
-                                                    }
                                                 }
 
                                                 @Override
@@ -341,7 +330,7 @@ public class PhotoRequestActivity extends BaseActivity {
 
                                         }
                                     });
-
+                                    givenPermitsList.add(userImg);
                                 }
                             }
 
@@ -350,6 +339,13 @@ public class PhotoRequestActivity extends BaseActivity {
 
                             }
                         });
+
+                        if(gpcount>0)
+                        {
+                            Log.i(TAG, "onCompleted: givenPermitsList " + gpcount);
+                            givenPermitsCount.setVisibility(View.VISIBLE);
+                            givenPermitsCount.setText(String.valueOf(gpcount));
+                        }
                     }
 
                 }

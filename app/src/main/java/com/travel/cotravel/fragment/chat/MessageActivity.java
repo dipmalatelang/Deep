@@ -25,6 +25,12 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.travel.cotravel.BaseActivity;
 import com.travel.cotravel.MainActivity;
 import com.travel.cotravel.R;
@@ -34,11 +40,6 @@ import com.travel.cotravel.fragment.chat.adapter.MessageAdapter;
 import com.travel.cotravel.fragment.chat.module.Chat;
 import com.travel.cotravel.fragment.trip.module.User;
 import com.travel.cotravel.fragment.visitor.UserImg;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -56,6 +57,7 @@ import static com.travel.cotravel.Constants.ChatsInstance;
 import static com.travel.cotravel.Constants.FavoritesInstance;
 import static com.travel.cotravel.Constants.PicturesInstance;
 import static com.travel.cotravel.Constants.UsersInstance;
+
 
 public class MessageActivity extends BaseActivity {
 
@@ -278,7 +280,7 @@ public class MessageActivity extends BaseActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
                 if (notify) {
-                    sendMsgNotifiaction(fuser.getUid(),userid,receiver, Objects.requireNonNull(user).getUsername(), msg);
+                    sendMsgNotifiaction(fuser.getUid(),userid,receiver, Objects.requireNonNull(user).getUsername(), msg, "Message");
                 }
                 notify = false;
             }
@@ -324,18 +326,9 @@ public class MessageActivity extends BaseActivity {
         editor.apply();
     }
 
-    private void status(String status) {
-
-        HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put("status", status);
-
-        UsersInstance.child(fuser.getUid()).updateChildren(hashMap);
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
-        status("online");
         currentUser(userid);
     }
 
@@ -343,7 +336,6 @@ public class MessageActivity extends BaseActivity {
     protected void onPause() {
         super.onPause();
         ChatsInstance.removeEventListener(seenListener);
-        status("offline");
         currentUser("none");
     }
 

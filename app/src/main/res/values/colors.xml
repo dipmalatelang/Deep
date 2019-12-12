@@ -30,7 +30,15 @@
     <color name="color6">#808D6E63</color>
     <color name="color8">#80B0003A</color>
     <color name="color9">#80FFCA28</color>
-
     <color name="background">#1A6C3E72</color>
     <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">@color/colorPrimary</color>
+
+    <color name="color_gray_alpha">#65b7b7b7</color>
+    <color name="seekbar_color">#3be3e3</color>
+    <color name="text_color">#000000</color>
+    <color name="app_blue">#0e1f2f</color>
+    <color name="line_color">#FF15FF00</color>
+    <color name="shadow_color">#00000000</color>
+
+
 </resources>

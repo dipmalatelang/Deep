@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "180636531836-27vt75e5ff0fpeottrcoo30vg8utc0ve.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.travel.cotravel",
+            "certificate_hash": "bd007133c0031784d605aaff7b0b29eca92b03a7"
+          }
+        },
+        {
           "client_id": "180636531836-i60uf64mqg4uhu3rh58r411ubm6qk6im.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

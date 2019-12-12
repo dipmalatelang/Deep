@@ -14,4 +14,7 @@ public final class Constants {
     public static final DatabaseReference TokensInstance = FirebaseDatabase.getInstance().getReference("Tokens");
     public static final DatabaseReference TripsInstance = FirebaseDatabase.getInstance().getReference("Trips");
     public static final DatabaseReference UsersInstance = FirebaseDatabase.getInstance().getReference("Users");
+
+    public static final int STORAGE_PERMISSION_CODE=1;
+
 }

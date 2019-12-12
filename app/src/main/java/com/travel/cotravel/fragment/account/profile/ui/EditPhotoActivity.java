@@ -1,34 +1,31 @@
 package com.travel.cotravel.fragment.account.profile.ui;
 
-import android.app.ProgressDialog;
-import android.content.ContentResolver;
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
+import android.os.Environment;
+import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.MimeTypeMap;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -37,12 +34,14 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.annotations.NotNull;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.travel.cotravel.BaseActivity;
 import com.travel.cotravel.R;
+import com.travel.cotravel.fragment.account.profile.UploadService;
 import com.travel.cotravel.fragment.account.profile.adapter.MyAdapter;
 import com.travel.cotravel.fragment.account.profile.module.Upload;
+import com.travel.cotravel.fragment.account.profile.videoTrimmer.videoTrimmer.VideoTrimmerActivity;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -50,6 +49,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.travel.cotravel.Constants.PicturesInstance;
+import static com.travel.cotravel.Constants.STORAGE_PERMISSION_CODE;
 
 
 public class EditPhotoActivity extends BaseActivity {
@@ -71,6 +71,7 @@ public class EditPhotoActivity extends BaseActivity {
     private Uri videoPath;
     private static final int PICK_IMAGE_REQUEST = 234;
     private static final int PICK_VIDEO_REQUEST = 123;
+    private static final int VIDEO_TRIM=345;
 
     private StorageReference storageReference;
     private String getDownloadImageUrl;
@@ -134,6 +135,14 @@ public class EditPhotoActivity extends BaseActivity {
                     public_adapter = new MyAdapter(EditPhotoActivity.this, fuser.getUid(), gender, public_uploads, new MyAdapter.PhotoInterface() {
 
                         @Override
+                        public void playVideo(String url) {
+
+                            Intent intent = new Intent(EditPhotoActivity.this, ViewVideoActivity.class);
+                            intent.putExtra("VideoUrl", url);
+                            startActivity(intent);
+                        }
+
+                        @Override
                         public void setProfilePhoto(String id, String previousValue, int pos) {
                             PicturesInstance
                                     .child(fuser.getUid())
@@ -160,14 +169,18 @@ public class EditPhotoActivity extends BaseActivity {
                     });
 
                     publicRecyclerView.setAdapter(public_adapter);
-                }
-                else {
+                } else {
                     llPublicPhotos.setVisibility(View.GONE);
                 }
 
                 if (private_uploads.size() > 0) {
                     llPrivatePhotos.setVisibility(View.VISIBLE);
                     private_adapter = new MyAdapter(EditPhotoActivity.this, fuser.getUid(), gender, private_uploads, new MyAdapter.PhotoInterface() {
+
+                        @Override
+                        public void playVideo(String url) {
+
+                        }
 
                         @Override
                         public void setProfilePhoto(String id, String previousValue, int pos) {
@@ -194,8 +207,7 @@ public class EditPhotoActivity extends BaseActivity {
                         }
                     });
                     privateRecyclerView.setAdapter(private_adapter);
-                }
-                else {
+                } else {
                     llPrivatePhotos.setVisibility(View.GONE);
                 }
 
@@ -262,12 +274,19 @@ public class EditPhotoActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE_REQUEST && data != null && data.getData() != null) {
             filePath = data.getData();
-            uploadFile(filePath);
-        }
-        else if(requestCode == PICK_VIDEO_REQUEST && data!=null && data.getData() !=null)
-        {
-            videoPath=data.getData();
+            uploadImg(filePath);
+        } else if (requestCode == PICK_VIDEO_REQUEST && data != null && data.getData() != null) {
+            videoPath = data.getData();
             checkDurationOfVideo(videoPath);
+        }
+        else if (requestCode == VIDEO_TRIM) {
+                if (resultCode == RESULT_OK) {
+                    if (data != null) {
+                        String videoPath = data.getExtras().getString("INTENT_VIDEO_FILE");
+                        uploadVideo(Uri.parse(videoPath));
+                        Toast.makeText(EditPhotoActivity.this, "Video stored at " + videoPath, Toast.LENGTH_LONG).show();
+                    }
+                }
         }
     }
 
@@ -279,10 +298,19 @@ public class EditPhotoActivity extends BaseActivity {
                 int duration = mp.getDuration();
                 mp.release();
 
-                if((duration/1000) > 10){
+                if ((duration / 1000) > 10) {
                     // Show Your Messages
                     snackBar(llSelectImage, "Video duration is more than 10s");
-                }else{
+                    if(isPermissionGranted(EditPhotoActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE))
+                    {
+                        startActivityForResult(new Intent(EditPhotoActivity.this, VideoTrimmerActivity.class).putExtra("EXTRA_PATH", getPath(videoPath)), VIDEO_TRIM);
+//                        overridePendingTransition(0,0);
+                    }
+                    else {
+                        requestForPermission(EditPhotoActivity.this,Manifest.permission.WRITE_EXTERNAL_STORAGE,STORAGE_PERMISSION_CODE);
+                    }
+
+                } else {
                     uploadVideo(videoPath);
                 }
             }
@@ -291,130 +319,139 @@ public class EditPhotoActivity extends BaseActivity {
         }
     }
 
+    private String getPath(Uri uri) {
+//        final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
 
-    public String getFileExtension(Uri uri) {
-        ContentResolver cR = this.getContentResolver();
-        MimeTypeMap mime = MimeTypeMap.getSingleton();
-        return mime.getExtensionFromMimeType(cR.getType(uri));
+     /*   // DocumentProvider
+        if (isKitKat && DocumentsContract.isDocumentUri(this, uri)) {
+            // ExternalStorageProvider
+            if (isExternalStorageDocument(uri)) {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+
+                if ("primary".equalsIgnoreCase(type)) {
+                    return Environment.getExternalStorageDirectory() + "/" + split[1];
+                }
+            }
+            // DownloadsProvider
+            else if (isDownloadsDocument(uri)) {
+
+                final String id = DocumentsContract.getDocumentId(uri);
+                final Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+
+                return getDataColumn(this, contentUri, null, null);
+            }
+            // MediaProvider
+            else if (isMediaDocument(uri)) {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+
+                Uri contentUri = null;
+                if ("image".equals(type)) {
+                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                } else if ("video".equals(type)) {
+                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                } else if ("audio".equals(type)) {
+                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                }
+
+                final String selection = "_id=?";
+                final String[] selectionArgs = new String[]{
+                        split[1]
+                };
+
+                return getDataColumn(this, contentUri, selection, selectionArgs);
+            }
+        }
+        // MediaStore (and general)
+        else*/ if ("content".equalsIgnoreCase(uri.getScheme())) {
+            Log.i(TAG, "getPath: content");
+            return getDataColumn(this, uri, null, null);
+        }
+        // File
+        else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            Log.i(TAG, "getPath: file");
+            return uri.getPath();
+        }
+
+        return "";
     }
 
-    private void uploadVideo(Uri videoPath){
+/*    private boolean isExternalStorageDocument(Uri uri) {
+        return "com.android.externalstorage.documents".equals(uri.getAuthority());
+    }
+
+    private boolean isDownloadsDocument(Uri uri) {
+        return "com.android.providers.downloads.documents".equals(uri.getAuthority());
+    }
+
+    private boolean isMediaDocument(Uri uri) {
+        return "com.android.providers.media.documents".equals(uri.getAuthority());
+    }*/
+
+    private String getDataColumn(Context context, Uri uri, String selection,
+                                 String[] selectionArgs) {
+        Cursor cursor = null;
+        final String column = "_data";
+        final String[] projection = {column};
+        try {
+            int currentApiVersion = Build.VERSION.SDK_INT;
+            //TODO changes to solve gallery video issue
+            if (currentApiVersion > Build.VERSION_CODES.M && uri.toString().contains(getString(R.string.app_provider))) {
+                cursor = context.getContentResolver().query(uri, null, null, null, null);
+                if (cursor != null && cursor.moveToFirst()) {
+                    final int column_index = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                    if (cursor.getString(column_index) != null) {
+                        String state = Environment.getExternalStorageState();
+                        File file;
+                        if (Environment.MEDIA_MOUNTED.equals(state)) {
+                            file = new File(Environment.getExternalStorageDirectory() + "/DCIM/", cursor.getString(column_index));
+                        } else {
+                            file = new File(context.getFilesDir(), cursor.getString(column_index));
+                        }
+                        return file.getAbsolutePath();
+                    }
+                    return "";
+                }
+            } else {
+                cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,
+                        null);
+                if (cursor != null && cursor.moveToFirst()) {
+                    final int column_index = cursor.getColumnIndexOrThrow(column);
+                    if (cursor.getString(column_index) != null) {
+                        return cursor.getString(column_index);
+                    }
+                    return "";
+                }
+            }
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+        return "";
+    }
+
+    private void uploadVideo(Uri videoPath) {
         if (videoPath != null) {
 
-            final ProgressDialog progressDialog = new ProgressDialog(this);
-            progressDialog.setTitle("Uploading");
-            progressDialog.show();
-
-            final StorageReference sRef = storageReference.child("uploads/" + System.currentTimeMillis() + "." + getFileExtension(videoPath));
-
-            sRef.putFile(videoPath)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
-
-                            progressDialog.dismiss();
-
-                            snackBar(llSelectImage, "File Uploaded ");
-
-                            String uploadId = PicturesInstance.child(fuser.getUid()).push().getKey();
-
-                            sRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Uri> task) {
-                                    if (task.isSuccessful()) {
-                                        getDownloadImageUrl = Objects.requireNonNull(task.getResult()).toString();
-                                        Log.i("FirebaseImages", getDownloadImageUrl);
-
-//                                        Upload upload;
-                                     /*   if (public_uploads.size() == 0) {
-                                            upload = new Upload(uploadId, "Video", getDownloadImageUrl, 1);
-                                        } else {*/
-                                        Upload  upload = new Upload(uploadId, "Video", getDownloadImageUrl, 2);
-//                                        }
-
-                                        PicturesInstance.child(fuser.getUid()).child(Objects.requireNonNull(uploadId)).setValue(upload);
-                                    } else {
-                                        snackBar(llSelectImage, Objects.requireNonNull(task.getException()).getMessage());
-                                    }
-                                }
-                            });
-                        }
-                    })
-
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception exception) {
-                            progressDialog.dismiss();
-                        }
-                    })
-                    .addOnProgressListener(taskSnapshot -> {
-
-                        double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-                        progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
-                    });
-        } else {
-            snackBar(llSelectImage, "Please Select a Video");
+            startService(new Intent(this, UploadService.class)
+                    .putExtra(UploadService.EXTRA_VIDEO_URI, videoPath)
+                    .setAction(UploadService.ACTION_UPLOAD_VIDEO));
         }
     }
-    private void uploadFile(Uri filePath) {
+
+    private void uploadImg(Uri filePath) {
 
         if (filePath != null) {
-
-            final ProgressDialog progressDialog = new ProgressDialog(this);
-            progressDialog.setTitle("Uploading");
-            progressDialog.show();
-
-            final StorageReference sRef = storageReference.child("uploads/" + System.currentTimeMillis() + "." + getFileExtension(filePath));
-
-            sRef.putFile(filePath)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
-
-                            progressDialog.dismiss();
-
-                            snackBar(llSelectImage, "File Uploaded ");
-
-                            String uploadId = PicturesInstance.child(fuser.getUid()).push().getKey();
-
-                            sRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Uri> task) {
-                                    if (task.isSuccessful()) {
-                                        getDownloadImageUrl = Objects.requireNonNull(task.getResult()).toString();
-                                        Log.i("FirebaseImages", getDownloadImageUrl);
-
-                                        Upload upload;
-                                        if (public_uploads.size() == 0) {
-                                            upload = new Upload(uploadId, "Image", getDownloadImageUrl, 1);
-                                        } else {
-                                            upload = new Upload(uploadId, "Image", getDownloadImageUrl, 2);
-                                        }
-
-
-                                        PicturesInstance.child(fuser.getUid()).child(Objects.requireNonNull(uploadId)).setValue(upload);
-                                    } else {
-                                        snackBar(llSelectImage, Objects.requireNonNull(task.getException()).getMessage());
-                                    }
-                                }
-                            });
-                        }
-                    })
-
-
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception exception) {
-                            progressDialog.dismiss();
-                        }
-                    })
-                    .addOnProgressListener(taskSnapshot -> {
-
-                        double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-                        progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
-                    });
-        } else {
-            snackBar(llSelectImage, "Please Select a Image");
+            startService(new Intent(this, UploadService.class)
+                    .putExtra(UploadService.EXTRA_IMG_URI, filePath)
+                    .setAction(UploadService.ACTION_UPLOAD_IMG));
         }
     }
+
 }

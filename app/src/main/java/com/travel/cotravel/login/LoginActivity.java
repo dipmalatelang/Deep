@@ -83,6 +83,7 @@ public class LoginActivity extends BaseActivity implements  View.OnKeyListener {
         // Initialize Facebook Login button
         mCallbackManager = CallbackManager.Factory.create();
 
+
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
@@ -108,27 +109,31 @@ public class LoginActivity extends BaseActivity implements  View.OnKeyListener {
 
 //        value = getIntent().getExtras().getString("nextActivity");
 
-        loginButton.setReadPermissions("email", "public_profile");
-        loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                Log.d("Tiger", "facebook:onSuccess:" + loginResult);
-                Log.d("Tiger", "facebook:token:" + loginResult.getAccessToken());
-                handleFacebookAccessToken(loginResult.getAccessToken().getToken());
-            }
 
-            @Override
-            public void onCancel() {
-                Log.d("Tiger", "facebook:onCancel");
-                // ...
-            }
 
-            @Override
-            public void onError(FacebookException error) {
-                Log.d("Tiger", "facebook:onError", error);
-                // ...
-            }
-        });
+
+
+//        loginButton.setReadPermissions("email", "public_profile");
+//        loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+//            @Override
+//            public void onSuccess(LoginResult loginResult) {
+//                Log.d("Tiger", "facebook:onSuccess:" + loginResult);
+//                Log.d("Tiger", "facebook:token:" + loginResult.getAccessToken());
+//                handleFacebookAccessToken(loginResult.getAccessToken().getToken());
+//            }
+//
+//            @Override
+//            public void onCancel() {
+//                Log.d("Tiger", "facebook:onCancel");
+//                // ...
+//            }
+//
+//            @Override
+//            public void onError(FacebookException error) {
+//                Log.d("Tiger", "facebook:onError", error);
+//                // ...
+//            }
+//        });
     }
 
     @Override

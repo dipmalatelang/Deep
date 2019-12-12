@@ -43,16 +43,17 @@
                 app:layout_constraintTop_toTopOf="@+id/ivImage" />
 
             <TextView
-                android:id="@+id/civ"
+                android:id="@+id/tvStatus"
                 android:layout_width="8dp"
                 android:layout_height="8dp"
-                android:layout_marginBottom="12dp"
                 android:layout_weight="1"
                 android:background="@drawable/green"
                 android:textSize="8dp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/tvTitle"
                 app:layout_constraintEnd_toStartOf="@+id/tvTitle"
-                app:layout_constraintStart_toEndOf="@+id/ivImage" />
+                app:layout_constraintStart_toEndOf="@+id/ivImage"
+                app:layout_constraintTop_toTopOf="@+id/tvTitle" />
 
             <TextView
                 android:id="@+id/tvTitle"

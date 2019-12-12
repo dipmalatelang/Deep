@@ -1,8 +1,13 @@
 package com.travel.cotravel;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.SystemClock;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -16,6 +21,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 
 
 import com.google.android.material.snackbar.Snackbar;
@@ -50,6 +59,7 @@ import static com.travel.cotravel.Constants.ChatsInstance;
 import static com.travel.cotravel.Constants.FavoritesInstance;
 import static com.travel.cotravel.Constants.PicturesInstance;
 import static com.travel.cotravel.Constants.ProfileVisitorInstance;
+import static com.travel.cotravel.Constants.STORAGE_PERMISSION_CODE;
 import static com.travel.cotravel.Constants.TokensInstance;
 import static com.travel.cotravel.Constants.TrashInstance;
 import static com.travel.cotravel.Constants.UsersInstance;
@@ -69,7 +79,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     Boolean textType;
     boolean notify = false;
 
-    APIService apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService .class);
+
+    APIService apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
 
 
 
@@ -462,8 +473,60 @@ public abstract class BaseActivity extends AppCompatActivity {
         return false;
     }
 
+        public boolean isPermissionGranted(Context context, String strValue)
+        {
 
+            if(ContextCompat.checkSelfPermission(context, strValue)== PackageManager.PERMISSION_GRANTED)
+            {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
 
+        public void requestForPermission(Activity activity, String strValue, int permissionCode){
+            if(ActivityCompat.shouldShowRequestPermissionRationale(activity, strValue))
+            {
+                permissionDialog(activity,strValue,permissionCode);
+            }
+            else {
+                ActivityCompat.requestPermissions(activity,new String[]{strValue},permissionCode);
+            }
+        }
+
+    private void permissionDialog(Activity activity, String strValue, int permissionCode) {
+        new AlertDialog.Builder(activity).setTitle("Permission")
+                .setMessage("This permission are needed")
+        .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ActivityCompat.requestPermissions(activity,new String[]{strValue},permissionCode);
+            }
+        })
+        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        })
+        .create().show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        if(requestCode==STORAGE_PERMISSION_CODE){
+            if(grantResults.length>0 && grantResults[0]==PackageManager.PERMISSION_GRANTED)
+            {
+                Toast.makeText(this, "Granted", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                Toast.makeText(this, "denied", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+    }
 
     public void hideKeyboard() {
 
@@ -474,5 +537,72 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
+    public void uploadNotification(Context context, double progress)
+    {
+        final int progressMax=100;
+        NotificationCompat.Builder notification = new NotificationCompat.Builder(this,"Upload")
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle("Upload")
+                .setContentText("Uploaded " + ((int) progress) + "%...")
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setOngoing(true)
+                .setOnlyAlertOnce(true)
+                .setProgress(progressMax,0,false);
+
+        NotificationManagerCompat notificationManagerCompat=NotificationManagerCompat.from(context);
+        notificationManagerCompat.notify(123,notification.build());
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SystemClock.sleep(2000);
+                for(int progress =0;progress<=progressMax;progress+=10)
+                {
+                    notification.setProgress(progressMax,progress,false);
+                    notificationManagerCompat.notify(123,notification.build());
+                    SystemClock.sleep(1000);
+                }
+                notification.setContentText("Download finished")
+                        .setProgress(0,0,false)
+                .setOngoing(false);
+                notificationManagerCompat.notify(123,notification.build());
+            }
+        }).start();
+    }
+
+
+
+    public String milliSecondsToTimer(long milliseconds) {
+        String finalTimerString = "";
+        String secondsString;
+        String minutesString;
+
+
+        int hours = (int) (milliseconds / (1000 * 60 * 60));
+        int minutes = (int) (milliseconds % (1000 * 60 * 60)) / (1000 * 60);
+        int seconds = (int) ((milliseconds % (1000 * 60 * 60)) % (1000 * 60) / 1000);
+        // Add hours if there
+        if (hours > 0) {
+            finalTimerString = hours + ":";
+        }
+
+        // Prepending 0 to seconds if it is one digit
+        if (seconds < 10) {
+            secondsString = "0" + seconds;
+        } else {
+            secondsString = "" + seconds;
+        }
+
+        if (minutes < 10) {
+            minutesString = "0" + minutes;
+        } else {
+            minutesString = "" + minutes;
+        }
+
+        finalTimerString = finalTimerString + minutesString + ":" + secondsString;
+
+        // return timer string
+        return finalTimerString;
+    }
 
 }

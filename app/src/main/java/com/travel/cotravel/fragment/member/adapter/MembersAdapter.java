@@ -177,10 +177,20 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.TripView
             }
         }
 
+
+
         holder.mTitle.setText(userList.getName()+" , "+userList.getAge());
 
         holder.mCity.setText(userList.getLocation());
 
+
+        if(userList.getStatus().equalsIgnoreCase("Online"))
+        {
+            holder.tvStatus.setVisibility(View.VISIBLE);
+        }
+        else {
+            holder.tvStatus.setVisibility(View.GONE);
+        }
         if (getItemViewType(position) == VIEW_TYPE_SMALL) {
             if (position % 2 == 0)
                 holder.linearLayout.setBackgroundColor(mContext.getResources().getColor(R.color.color8));
@@ -223,7 +233,7 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.TripView
 
         ImageView mImage;
         ProgressBar progressBar;
-        TextView mTitle, mCity;
+        TextView mTitle, mCity ,tvStatus;
         CardView mCardView;
         LinearLayout linearLayout;
 
@@ -237,6 +247,7 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.TripView
                 mCardView = itemView.findViewById(R.id.cardview);
                 linearLayout = itemView.findViewById(R.id.linearLayout);
                 progressBar = itemView.findViewById(R.id.progressBar);
+                tvStatus=itemView.findViewById(R.id.tvStatus);
             }
             else {
                 mImage = itemView.findViewById(R.id.ivImage);
@@ -245,6 +256,7 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.TripView
                 mCardView = itemView.findViewById(R.id.cardview);
                 linearLayout = itemView.findViewById(R.id.linearLayout);
                 progressBar = itemView.findViewById(R.id.progressBar);
+                tvStatus=itemView.findViewById(R.id.tvStatus);
             }
         }
     }

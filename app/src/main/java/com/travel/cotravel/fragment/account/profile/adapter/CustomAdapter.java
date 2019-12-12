@@ -1,6 +1,7 @@
 package com.travel.cotravel.fragment.account.profile.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.widget.VideoView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -23,6 +25,8 @@ import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
 import com.travel.cotravel.R;
 import com.travel.cotravel.fragment.account.profile.module.Upload;
+import com.travel.cotravel.fragment.account.profile.ui.ViewVideoActivity;
+
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -32,6 +36,7 @@ public class CustomAdapter extends PagerAdapter {
     private LayoutInflater inflater;
     private ArrayList<Upload> mUploads;
     String uid, gender;
+    boolean isRunning=false;
 
 
     public CustomAdapter(Context ctx, String uid, ArrayList<Upload> uploads, String gender) {
@@ -58,15 +63,28 @@ public class CustomAdapter extends PagerAdapter {
         View v = Objects.requireNonNull(inflater).inflate(R.layout.swipe,container,false);
         ImageView img = v.findViewById(R.id.imageView);
         VideoView videoView=v.findViewById(R.id.videoView);
+        ImageView ivPlay=v.findViewById(R.id.ivPlay);
 
         ProgressBar progressBar=v.findViewById(R.id.progressBar);
         if(mUploads.get(position).getName().equalsIgnoreCase("Video"))
         {
             img.setVisibility(View.GONE);
+            videoView.setVideoURI(Uri.parse(mUploads.get(position).getUrl()));
+            videoView.seekTo(1000);
             progressBar.setVisibility(View.GONE);
             videoView.setVisibility(View.VISIBLE);
-            videoView.setVideoURI(Uri.parse(mUploads.get(position).getUrl()));
-            videoView.start();
+            ivPlay.setVisibility(View.VISIBLE);
+
+        /*    videoView.setOnPreparedListener(mp -> {
+                mp.setVolume(0,0);
+                mp.start();
+            });*/
+
+            ivPlay.setOnClickListener(v1 -> {
+                Intent intent = new Intent(ctx, ViewVideoActivity.class);
+                intent.putExtra("VideoUrl", mUploads.get(position).getUrl());
+                ctx.startActivity(intent);
+            });
         }
         else {
             if(gender.equalsIgnoreCase("Female"))
@@ -128,7 +146,8 @@ public class CustomAdapter extends PagerAdapter {
     }
 
     @Override
-    public void destroyItem(View container, int position, @NonNull Object object) {
-        container.refreshDrawableState();
+    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+        ((ViewPager) container).removeView((View) object);
+        isRunning=false;
     }
 }

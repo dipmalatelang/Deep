@@ -33,7 +33,11 @@
     <string name="want_to_see_photo">Wants to see your private photos</string>
     <string name="Reset_password">By clicking RESET ,you will receive an email to reset your password</string>
     <string name="resend_code"><u>Resend Code</u></string>
-
+    <string name="video_length_validation">Video should be of minimum 3 seconds</string>
+    <string name="select_video_text">Select 10 seconds video</string>
+    <string name="upload">Upload</string>
+    <string name="cancel">Cancel</string>
+    <string name="app_provider">com.demo.videotrimmer.provider</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 

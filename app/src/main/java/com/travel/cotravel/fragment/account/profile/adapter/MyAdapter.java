@@ -2,6 +2,7 @@ package com.travel.cotravel.fragment.account.profile.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,7 +32,6 @@ import com.travel.cotravel.fragment.account.profile.ui.EditPhotoActivity;
 import com.wajahatkarim3.easyflipview.EasyFlipView;
 
 import java.util.List;
-
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
     private Context mcontext;
@@ -65,13 +65,18 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
 
         if(mUploads.get(position).getName().equalsIgnoreCase("Video"))
         {
-            holder.set_main.setVisibility(View.GONE);
+            holder.set_main.setText("View");
+            holder.delete.setText("Remove video");
             holder.imageView.setVisibility(View.GONE);
+            holder.videoView.setVideoURI(Uri.parse(mUploads.get(position).getUrl()));
+            holder.videoView.seekTo(1000);
             holder.progressBar.setVisibility(View.GONE);
             holder.videoView.setVisibility(View.VISIBLE);
-            holder.videoView.setVideoURI(Uri.parse(mUploads.get(position).getUrl()));
-            holder.videoView.start();
 
+            holder.videoView.setOnPreparedListener(mp -> {
+                mp.setVolume(0,0);
+                mp.start();
+            });
         }
         else {
             holder.imageView.setAdjustViewBounds(true);
@@ -149,34 +154,23 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
             ((EditPhotoActivity)mcontext).appDetails("CurProfilePhoto",uploadCurrent.getId());
         }
 
-        holder.flipView.setOnFlipListener(new EasyFlipView.OnFlipAnimationListener() {
-            @Override
-            public void onViewFlipCompleted(EasyFlipView flipView, EasyFlipView.FlipState newCurrentSide)
-            {
-                holder.set_main.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+        holder.flipView.setOnFlipListener((flipView, newCurrentSide) -> {
+            holder.set_main.setOnClickListener(view -> {
 
-                        listener.setProfilePhoto(mUploads.get(position).getId(),((EditPhotoActivity)mcontext).getAppDetails("CurProfilePhoto"),position);
-                        holder.ivTitle.setVisibility(View.VISIBLE);
+                if(mUploads.get(position).getName().equalsIgnoreCase("Video"))
+                {
+                    listener.playVideo(mUploads.get(position).getUrl());
+                }
+                else {
+                    listener.setProfilePhoto(mUploads.get(position).getId(), ((EditPhotoActivity) mcontext).getAppDetails("CurProfilePhoto"), position);
+                    holder.ivTitle.setVisibility(View.VISIBLE);
+                }
 
-                    }
-                });
+            });
 
-                holder.pp_eye.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        listener.setPhotoAsPrivate(mUploads.get(position).getId());
-                    }
-                });
+            holder.pp_eye.setOnClickListener(view -> listener.setPhotoAsPrivate(mUploads.get(position).getId()));
 
-                holder.delete.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        listener.removePhoto(mUploads.get(position).getId());
-                    }
-                });
-            }
+            holder.delete.setOnClickListener(view -> listener.removePhoto(mUploads.get(position).getId()));
         });
     }
 
@@ -212,6 +206,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
 
     PhotoInterface listener;
     public interface PhotoInterface{
+        void playVideo(String url);
         void setProfilePhoto(String id, String previousValue, int position);
         void removePhoto(String id);
         void setPhotoAsPrivate(String id);

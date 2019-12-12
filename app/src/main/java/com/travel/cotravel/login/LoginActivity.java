@@ -111,7 +111,35 @@ public class LoginActivity extends BaseActivity implements  View.OnKeyListener {
 
 
 
+        loginButton.setReadPermissions("email", "public_profile");
+        loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Log.d(TAG, "facebook:onSuccess:" + loginResult);
+                handleFacebookAccessToken(loginResult.getAccessToken().getToken());
+            }
 
+            @Override
+            public void onCancel() {
+
+                Log.d(TAG, "facebook:onCancel");
+                // ...
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Log.d(TAG, "facebook:onError", error);
+                // ...
+            }
+        });
+// ...
+//        @Override
+//        protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//            super.onActivityResult(requestCode, resultCode, data);
+//
+//            // Pass the activity result back to the Facebook SDK
+//            mCallbackManager.onActivityResult(requestCode, resultCode, data);
+//        }
 
 //        loginButton.setReadPermissions("email", "public_profile");
 //        loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
@@ -145,6 +173,10 @@ public class LoginActivity extends BaseActivity implements  View.OnKeyListener {
                 "UserFirst", true);
         sharedPreferencesEditor.apply();
     }
+
+
+
+
 
     private void handleFacebookAccessToken(String token) {
         showProgressDialog();
@@ -218,10 +250,8 @@ public class LoginActivity extends BaseActivity implements  View.OnKeyListener {
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        if (mAuth != null) {
-            FirebaseUser currentUser = mAuth.getCurrentUser();
-            updateUI(currentUser);
-        }
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        updateUI(currentUser);
     }
 
     @Override

@@ -14,6 +14,7 @@ public class Chat {
         this.msg_date=msg_date;
         this.msg_time=msg_time;
         this.isseen = isseen;
+
     }
 
     public Chat() {

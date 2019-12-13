@@ -172,7 +172,7 @@ public class ProfileActivity extends BaseActivity {
     private FirebaseUser fuser;
     TripList tripL;
     UserImg userL;
-    String profileId;
+    String profileId,email;
 
     @BindView(R.id.rv_trip_value)
     RecyclerView rvTripValue;
@@ -245,6 +245,7 @@ public class ProfileActivity extends BaseActivity {
             floatingActionButton2.show();
             tripL = (TripList) getIntent().getSerializableExtra("MyObj");
             profileId = Objects.requireNonNull(tripL).getUser().getId();
+            email=tripL.getUser().getEmail();
             getAllImages(profileId, tripL.getUser().getGender());
             getAllTrips(profileId);
             if (tripL.getUserImg().getFav() == 1) {
@@ -266,6 +267,7 @@ public class ProfileActivity extends BaseActivity {
             floatingActionButton2.show();
             userL = (UserImg) getIntent().getSerializableExtra("MyUserObj");
             profileId = Objects.requireNonNull(userL).getUser().getId();
+            email=userL.getUser().getEmail();
             getAllImages(profileId, userL.getUser().getGender());
             getAllTrips(profileId);
 
@@ -913,6 +915,7 @@ public class ProfileActivity extends BaseActivity {
             case R.id.floatingActionButton2:
                 Intent intent = new Intent(this, MessageActivity.class);
                 intent.putExtra("userid", profileId);
+                intent.putExtra("email",email);
                 startActivity(intent);
 
                 break;

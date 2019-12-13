@@ -37,10 +37,6 @@ public class SettingsActivity extends BaseActivity implements CompoundButton.OnC
     Switch switchEmailMsgNotify;
     @BindView(R.id.switchSmsMsgNotify)
     Switch switchSmsMsgNotify;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.appbar)
-    AppBarLayout appbar;
     @BindView(R.id.view1)
     View view1;
     @BindView(R.id.tv_notification)

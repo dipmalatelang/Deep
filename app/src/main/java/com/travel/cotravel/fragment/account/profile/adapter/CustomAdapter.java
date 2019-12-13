@@ -89,23 +89,9 @@ public class CustomAdapter extends PagerAdapter {
         else {
             if(gender.equalsIgnoreCase("Female"))
             {
-                Glide.with(ctx).asBitmap().load(mUploads.get(position).getUrl())
+                Glide.with(ctx).asBitmap().load(mUploads.get(position).getUrl()).placeholder(R.drawable.no_photo_female)
                         .centerCrop()
                         .override(450,600)
-                        .listener(new RequestListener<Bitmap>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                                progressBar.setVisibility(View.GONE);
-                                img.setImageResource(R.drawable.no_photo_female);
-                                return false;
-                            }
-
-                            @Override
-                            public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                                progressBar.setVisibility(View.GONE);
-                                return false;
-                            }
-                        })
                         .into(new SimpleTarget<Bitmap>() {
                             @Override
                             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
@@ -114,23 +100,9 @@ public class CustomAdapter extends PagerAdapter {
                         });
             }
             else {
-                Glide.with(ctx).asBitmap().load(mUploads.get(position).getUrl())
+                Glide.with(ctx).asBitmap().load(mUploads.get(position).getUrl()).placeholder(R.drawable.no_photo_male)
                         .centerCrop()
                         .override(450,600)
-                        .listener(new RequestListener<Bitmap>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                                progressBar.setVisibility(View.GONE);
-                                img.setImageResource(R.drawable.no_photo_male);
-                                return false;
-                            }
-
-                            @Override
-                            public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                                progressBar.setVisibility(View.GONE);
-                                return false;
-                            }
-                        })
                         .into(new SimpleTarget<Bitmap>() {
                             @Override
                             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {

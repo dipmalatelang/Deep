@@ -237,9 +237,11 @@ public class EditPhotoActivity extends BaseActivity {
         return true;
     }
 
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
+
             case R.id.video:
                 showVideoChooser();
                 break;
@@ -254,6 +256,7 @@ public class EditPhotoActivity extends BaseActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 
     public void showVideoChooser() {
         Intent intent = new Intent();

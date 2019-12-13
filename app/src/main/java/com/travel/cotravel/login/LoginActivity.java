@@ -132,36 +132,7 @@ public class LoginActivity extends BaseActivity implements  View.OnKeyListener {
                 // ...
             }
         });
-// ...
-//        @Override
-//        protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//            super.onActivityResult(requestCode, resultCode, data);
-//
-//            // Pass the activity result back to the Facebook SDK
-//            mCallbackManager.onActivityResult(requestCode, resultCode, data);
-//        }
 
-//        loginButton.setReadPermissions("email", "public_profile");
-//        loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
-//            @Override
-//            public void onSuccess(LoginResult loginResult) {
-//                Log.d("Tiger", "facebook:onSuccess:" + loginResult);
-//                Log.d("Tiger", "facebook:token:" + loginResult.getAccessToken());
-//                handleFacebookAccessToken(loginResult.getAccessToken().getToken());
-//            }
-//
-//            @Override
-//            public void onCancel() {
-//                Log.d("Tiger", "facebook:onCancel");
-//                // ...
-//            }
-//
-//            @Override
-//            public void onError(FacebookException error) {
-//                Log.d("Tiger", "facebook:onError", error);
-//                // ...
-//            }
-//        });
     }
 
     @Override
@@ -242,7 +213,7 @@ public class LoginActivity extends BaseActivity implements  View.OnKeyListener {
         String uploadId = PicturesInstance.child(user.getUid()).push().getKey();
         PicturesInstance.child(user.getUid()).child(Objects.requireNonNull(uploadId)).setValue(new Upload(uploadId, "Image", Objects.requireNonNull(user.getPhotoUrl()).toString() + "?type=large", 1));
 
-        if (mAuth != null)
+//        if (mAuth != null)
             updateUI(mAuth.getCurrentUser());
     }
 

@@ -78,25 +78,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
         if(user.getGender().equalsIgnoreCase("Female"))
         {
-            Glide.with(mContext).asBitmap().load(mUsers.get(position).getPictureUrl())
+            Glide.with(mContext).asBitmap().load(mUsers.get(position).getPictureUrl()).placeholder(R.drawable.no_photo_female)
                     .fitCenter()
                     .override(450,600)
-                    .listener(new RequestListener<Bitmap>() {
-                        @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-
-                            holder.profile_image.setImageResource(R.drawable.no_photo_female);
-                            holder.profile_image.setImageLevel(50);
-
-                            return false;
-                        }
-
-                        @Override
-                        public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-
-                            return false;
-                        }
-                    })
                     .into(new SimpleTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
@@ -106,23 +90,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                     });
         }
         else {
-            Glide.with(mContext).asBitmap().load(mUsers.get(position).getPictureUrl())
+            Glide.with(mContext).asBitmap().load(mUsers.get(position).getPictureUrl()).placeholder(R.drawable.no_photo_male)
                     .centerCrop()
                     .override(450,600)
-                    .listener(new RequestListener<Bitmap>() {
-                        @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-
-                            holder.profile_image.setImageResource(R.drawable.no_photo_male);
-                            return false;
-                        }
-
-                        @Override
-                        public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-
-                            return false;
-                        }
-                    })
                     .into(new SimpleTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
@@ -161,6 +131,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, MessageActivity.class);
                 intent.putExtra("userid", user.getId());
+                intent.putExtra("email",user.getEmail());
                 mContext.startActivity(intent);
             }
         });
@@ -205,6 +176,16 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     @Override
     public int getItemCount() {
         return mUsers.size();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 
     public  class ViewHolder extends RecyclerView.ViewHolder{

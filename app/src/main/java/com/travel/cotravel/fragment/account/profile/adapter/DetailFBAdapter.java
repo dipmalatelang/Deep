@@ -39,13 +39,13 @@ public class DetailFBAdapter extends RecyclerView.Adapter<DetailFBAdapter.Detail
     }
     @NonNull
     @Override
-    public DetailFBAdapter.DetailFBHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public DetailFBHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view= LayoutInflater.from(context).inflate(R.layout.layout_fb_images,parent,false);
         return new DetailFBHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull DetailFBAdapter.DetailFBHolder holder, int position) {
+    public void onBindViewHolder(@NonNull DetailFBHolder holder, int position) {
 
         if(urlImages.get(position).getStatus()==1)
         {
@@ -73,23 +73,9 @@ public class DetailFBAdapter extends RecyclerView.Adapter<DetailFBAdapter.Detail
 
         if(gender.equalsIgnoreCase("Female"))
         {
-            Glide.with(context).asBitmap().load(urlImages.get(position).getUrl())
+            Glide.with(context).asBitmap().load(urlImages.get(position).getUrl()).placeholder(R.drawable.no_photo_female)
                     .centerCrop()
                     .override(450,600)
-                    .listener(new RequestListener<Bitmap>() {
-                        @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                            holder.progressBar.setVisibility(View.GONE);
-                            holder.imageView.setImageResource(R.drawable.no_photo_female);
-                            return false;
-                        }
-
-                        @Override
-                        public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                            holder.progressBar.setVisibility(View.GONE);
-                            return false;
-                        }
-                    })
                     .into(new SimpleTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
@@ -99,23 +85,9 @@ public class DetailFBAdapter extends RecyclerView.Adapter<DetailFBAdapter.Detail
 
         }
         else {
-            Glide.with(context).asBitmap().load(urlImages.get(position).getUrl())
+            Glide.with(context).asBitmap().load(urlImages.get(position).getUrl()).placeholder(R.drawable.no_photo_male)
                     .centerCrop()
                     .override(450, 600)
-                    .listener(new RequestListener<Bitmap>() {
-                        @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                            holder.progressBar.setVisibility(View.GONE);
-                            holder.imageView.setImageResource(R.drawable.no_photo_male);
-                            return false;
-                        }
-
-                        @Override
-                        public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                            holder.progressBar.setVisibility(View.GONE);
-                            return false;
-                        }
-                    })
                     .into(new SimpleTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
@@ -128,6 +100,16 @@ public class DetailFBAdapter extends RecyclerView.Adapter<DetailFBAdapter.Detail
     @Override
     public int getItemCount() {
         return urlImages.size();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 
     public class DetailFBHolder extends RecyclerView.ViewHolder {

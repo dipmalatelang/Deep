@@ -126,6 +126,16 @@ public class FB_Adapter extends RecyclerView.Adapter<FB_Adapter.ImageViewHolder>
         return mUploads.size();
     }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
     public class ImageViewHolder extends RecyclerView.ViewHolder{
         public ImageView imageView;
         ConstraintLayout cl_image;

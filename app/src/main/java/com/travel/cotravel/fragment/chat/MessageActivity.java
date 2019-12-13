@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -38,6 +39,7 @@ import com.travel.cotravel.fragment.account.profile.module.Upload;
 import com.travel.cotravel.fragment.account.profile.ui.ProfileActivity;
 import com.travel.cotravel.fragment.chat.adapter.MessageAdapter;
 import com.travel.cotravel.fragment.chat.module.Chat;
+import com.travel.cotravel.fragment.chat.notification.GMailSender;
 import com.travel.cotravel.fragment.trip.module.User;
 import com.travel.cotravel.fragment.visitor.UserImg;
 
@@ -77,7 +79,7 @@ public class MessageActivity extends BaseActivity {
 
     ValueEventListener seenListener;
 
-    String userid;
+    String userid,email;
     private List<UserImg> msgArray = new ArrayList<>();
 
     boolean notify = false;
@@ -107,6 +109,7 @@ public class MessageActivity extends BaseActivity {
 
         intent = getIntent();
         userid = intent.getStringExtra("userid");
+        email=intent.getStringExtra("email");
 
         fuser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -136,23 +139,9 @@ public class MessageActivity extends BaseActivity {
 
                         if(user.getGender().equalsIgnoreCase("Female"))
                         {
-                            Glide.with(getApplicationContext()).asBitmap().load(userImg.getPictureUrl())
+                            Glide.with(getApplicationContext()).asBitmap().load(userImg.getPictureUrl()).placeholder(R.drawable.no_photo_female)
                                     .fitCenter()
                                     .override(450,600)
-                                    .listener(new RequestListener<Bitmap>() {
-                                        @Override
-                                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                                            profile_image.setImageResource(R.drawable.no_photo_female);
-
-                                            return false;
-                                        }
-
-                                        @Override
-                                        public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-
-                                            return false;
-                                        }
-                                    })
                                     .into(new SimpleTarget<Bitmap>() {
                                         @Override
                                         public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
@@ -162,23 +151,9 @@ public class MessageActivity extends BaseActivity {
                                     });
                         }
                         else {
-                            Glide.with(getApplicationContext()).asBitmap().load(userImg.getPictureUrl())
+                            Glide.with(getApplicationContext()).asBitmap().load(userImg.getPictureUrl()).placeholder(R.drawable.no_photo_male)
                                     .centerCrop()
                                     .override(450,600)
-                                    .listener(new RequestListener<Bitmap>() {
-                                        @Override
-                                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-
-                                            profile_image.setImageResource(R.drawable.no_photo_male);
-                                            return false;
-                                        }
-
-                                        @Override
-                                        public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-
-                                            return false;
-                                        }
-                                    })
                                     .into(new SimpleTarget<Bitmap>() {
                                         @Override
                                         public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
@@ -221,6 +196,26 @@ public class MessageActivity extends BaseActivity {
 
         seenMessage(userid);
     }
+
+    private void sendMessage() {
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    GMailSender sender = new GMailSender("support@cotravel.in",
+                            "Jiyakiyan@9");
+                    sender.sendMail("Cotravel", "New Messasge from" +username,
+                            "support@cotravel.in",email );
+                    Log.d(TAG, "SendMail22: "+email+""+username);
+                } catch (Exception e) {
+                    Log.e("SendMail", e.getMessage(), e);
+                }
+            }
+
+        }).start();
+    }
+
 
     private void seenMessage(final String userid) {
 
@@ -281,6 +276,7 @@ public class MessageActivity extends BaseActivity {
                 User user = dataSnapshot.getValue(User.class);
                 if (notify) {
                     sendMsgNotifiaction(fuser.getUid(),userid,receiver, Objects.requireNonNull(user).getUsername(), msg, "Message");
+                    sendMessage();
                 }
                 notify = false;
             }
@@ -327,8 +323,8 @@ public class MessageActivity extends BaseActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onStart() {
+        super.onStart();
         currentUser(userid);
     }
 

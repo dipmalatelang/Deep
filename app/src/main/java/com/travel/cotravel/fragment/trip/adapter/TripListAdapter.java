@@ -36,6 +36,16 @@ public class TripListAdapter extends RecyclerView.Adapter<TripListAdapter.TripHo
         return tripDataList.size();
     }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
     public class TripHolder extends RecyclerView.ViewHolder{
 
         TextView tv_city,tv_date;

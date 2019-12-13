@@ -64,8 +64,8 @@ public class PhotoRequestActivity extends BaseActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onStart() {
+        super.onStart();
         viewPhotoRequest();
         photoPermits();
         givenPermits();

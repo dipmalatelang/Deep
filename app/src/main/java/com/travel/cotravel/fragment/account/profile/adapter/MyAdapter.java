@@ -85,23 +85,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
             if(gender.equalsIgnoreCase("Female"))
             {
 
-                Glide.with(mcontext).asBitmap().load(uploadCurrent.getUrl())
+                Glide.with(mcontext).asBitmap().load(uploadCurrent.getUrl()).placeholder(R.drawable.no_photo_female)
                         .centerCrop()
                         .override(450,600)
-                        .listener(new RequestListener<Bitmap>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                                holder.progressBar.setVisibility(View.GONE);
-                                holder.imageView.setImageResource(R.drawable.no_photo_female);
-                                return false;
-                            }
-
-                            @Override
-                            public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                                holder.progressBar.setVisibility(View.GONE);
-                                return false;
-                            }
-                        })
                         .into(new SimpleTarget<Bitmap>() {
                             @Override
                             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
@@ -111,23 +97,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
 
             }
             else {
-                Glide.with(mcontext).asBitmap().load(uploadCurrent.getUrl())
+                Glide.with(mcontext).asBitmap().load(uploadCurrent.getUrl()).placeholder(R.drawable.no_photo_male)
                         .centerCrop()
                         .override(450, 600)
-                        .listener(new RequestListener<Bitmap>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                                holder.progressBar.setVisibility(View.GONE);
-                                holder.imageView.setImageResource(R.drawable.no_photo_male);
-                                return false;
-                            }
-
-                            @Override
-                            public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                                holder.progressBar.setVisibility(View.GONE);
-                                return false;
-                            }
-                        })
                         .into(new SimpleTarget<Bitmap>() {
                             @Override
                             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
@@ -179,6 +151,16 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
     @Override
     public int getItemCount() {
         return mUploads.size();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 
     public class ImageViewHolder extends RecyclerView.ViewHolder{

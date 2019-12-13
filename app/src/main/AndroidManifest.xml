@@ -76,24 +76,23 @@
 
         <activity android:name=".fragment.account.profile.ui.ContactUs"
             android:screenOrientation="portrait"
-
+            android:theme="@style/noToolbar"
             android:launchMode="singleTask"/>
 
         <activity android:name="com.travel.cotravel.fragment.account.profile.ui.PrivacyPolicy"
             android:screenOrientation="portrait"
-
+            android:theme="@style/noToolbar"
             android:launchMode="singleTask"/>
 
         <activity android:name=".fragment.account.profile.ui.Terms_and_Condition"
             android:screenOrientation="portrait"
-
+            android:theme="@style/noToolbar"
             android:launchMode="singleTask"/>
 
         <activity android:name="com.travel.cotravel.fragment.account.profile.ui.SettingsActivity"
             android:screenOrientation="portrait"
             android:label="Settings"
             android:launchMode="singleTask"
-            android:theme="@style/noToolbar"
             android:parentActivityName="com.travel.cotravel.MainActivity"/>
 
 

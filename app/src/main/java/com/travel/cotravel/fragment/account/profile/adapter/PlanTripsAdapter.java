@@ -46,6 +46,16 @@ public class PlanTripsAdapter extends RecyclerView.Adapter<PlanTripsAdapter.Plan
         return planTripsList.size();
     }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
     public class PlanTripsHolder extends RecyclerView.ViewHolder{
 
         TextView txt_place, txt_date, txt_note;

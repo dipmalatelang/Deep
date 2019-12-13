@@ -67,24 +67,13 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
 
         if(tList.getGender().equalsIgnoreCase("Female"))
         {
+            Glide.with(mContext).load(R.drawable.no_photo_female).centerCrop().override(450,600).into(holder.mImage);
+            holder.progressBar.setVisibility(View.GONE);
+
             if(tList.getAccount_type()==1) {
-                Glide.with(mContext).asBitmap().load(mTrip.get(position).getPictureUrl())
+                Glide.with(mContext).asBitmap().load(mTrip.get(position).getPictureUrl()).placeholder(R.drawable.no_photo_female)
                         .centerCrop()
                         .override(450, 600)
-                        .listener(new RequestListener<Bitmap>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                                holder.progressBar.setVisibility(View.GONE);
-                                holder.mImage.setImageResource(R.drawable.no_photo_female);
-                                return false;
-                            }
-
-                            @Override
-                            public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                                holder.progressBar.setVisibility(View.GONE);
-                                return false;
-                            }
-                        })
                         .into(new SimpleTarget<Bitmap>() {
                             @Override
                             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
@@ -93,44 +82,20 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
                         });
             }
             else {
-                Glide.with(mContext).load(R.drawable.hidden_photo_female_thumb)
+                Glide.with(mContext).load(R.drawable.hidden_photo_female_thumb).placeholder(R.drawable.hidden_photo_female_thumb)
                         .centerCrop()
                         .override(450, 600)
-                        .listener(new RequestListener<Drawable>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                holder.progressBar.setVisibility(View.GONE);
-                                holder.mImage.setImageResource(R.drawable.hidden_photo_female_thumb);
-                                return false;
-                            }
-
-                            @Override
-                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                holder.progressBar.setVisibility(View.GONE);
-                                return false;
-                            }
-                        }).into(holder.mImage);
+                       .into(holder.mImage);
             }
         }
         else {
+            Glide.with(mContext).load(R.drawable.no_photo_male).centerCrop().override(450,600).into(holder.mImage);
+            holder.progressBar.setVisibility(View.GONE);
+
             if (tList.getAccount_type() == 1) {
-                Glide.with(mContext).asBitmap().load(mTrip.get(position).getPictureUrl())
+                Glide.with(mContext).asBitmap().load(mTrip.get(position).getPictureUrl()).placeholder(R.drawable.no_photo_male)
                         .centerCrop()
                         .override(450, 600)
-                        .listener(new RequestListener<Bitmap>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                                holder.progressBar.setVisibility(View.GONE);
-                                holder.mImage.setImageResource(R.drawable.no_photo_male);
-                                return false;
-                            }
-
-                            @Override
-                            public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                                holder.progressBar.setVisibility(View.GONE);
-                                return false;
-                            }
-                        })
                         .into(new SimpleTarget<Bitmap>() {
                             @Override
                             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
@@ -139,23 +104,10 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
                         });
             }
             else {
-                Glide.with(mContext).load(R.drawable.hidden_photo_male_thumb)
+                Glide.with(mContext).load(R.drawable.hidden_photo_male_thumb).placeholder(R.drawable.hidden_photo_male_thumb)
                         .centerCrop()
                         .override(450, 600)
-                        .listener(new RequestListener<Drawable>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                holder.progressBar.setVisibility(View.GONE);
-                                holder.mImage.setImageResource(R.drawable.hidden_photo_male_thumb);
-                                return false;
-                            }
-
-                            @Override
-                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                holder.progressBar.setVisibility(View.GONE);
-                                return false;
-                            }
-                        }).into(holder.mImage);
+                       .into(holder.mImage);
             }
         }
 
@@ -208,6 +160,16 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
     @Override
     public int getItemCount() {
         return mTrip.size();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 
     class ProfileVisitorViewHolder extends RecyclerView.ViewHolder

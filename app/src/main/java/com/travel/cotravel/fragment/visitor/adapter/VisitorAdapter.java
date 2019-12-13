@@ -61,20 +61,8 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
         if(tList.getUser().getGender().equalsIgnoreCase("Female"))
         {
             if (tList.getUser().getAccount_type() == 1) {
-                Glide.with(mContext).asBitmap().load(mTrip.get(position).getPictureUrl())
+                Glide.with(mContext).asBitmap().load(mTrip.get(position).getPictureUrl()).placeholder(R.drawable.no_photo_female)
                         .override(450, 600)
-                        .listener(new RequestListener<Bitmap>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                                holder.mImage.setImageResource(R.drawable.no_photo_female);
-                                return false;
-                            }
-
-                            @Override
-                            public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                                return false;
-                            }
-                        })
                         .into(new SimpleTarget<Bitmap>() {
                             @Override
                             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
@@ -83,43 +71,15 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
                         });
             }
             else {
-                Glide.with(mContext).load(R.drawable.hidden_photo_female_thumb)
+                Glide.with(mContext).load(R.drawable.hidden_photo_female_thumb).placeholder(R.drawable.hidden_photo_female_thumb)
                         .override(450, 600)
-                        .listener(new RequestListener<Drawable>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-
-
-                                holder.mImage.setImageResource(R.drawable.hidden_photo_female_thumb);
-                                return false;
-                            }
-
-                            @Override
-                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-
-                                return false;
-                            }
-                        }).into(holder.mImage);
+                     .into(holder.mImage);
             }
         }
         else {
             if (tList.getUser().getAccount_type() == 1) {
-                Glide.with(mContext).asBitmap().load(mTrip.get(position).getPictureUrl())
+                Glide.with(mContext).asBitmap().load(mTrip.get(position).getPictureUrl()).placeholder(R.drawable.no_photo_male)
                         .override(450, 600)
-                        .listener(new RequestListener<Bitmap>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-
-                                holder.mImage.setImageResource(R.drawable.no_photo_male);
-                                return false;
-                            }
-
-                            @Override
-                            public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-
-                                return false;
-                            }
-                        })
                         .into(new SimpleTarget<Bitmap>() {
                             @Override
                             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
@@ -128,22 +88,9 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
                         });
             }
             else {
-                Glide.with(mContext).load(R.drawable.hidden_photo_male_thumb)
+                Glide.with(mContext).load(R.drawable.hidden_photo_male_thumb).placeholder(R.drawable.hidden_photo_male_thumb)
                         .override(450, 600)
-                        .listener(new RequestListener<Drawable>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-
-                                holder.mImage.setImageResource(R.drawable.hidden_photo_male_thumb);
-                                return false;
-                            }
-
-                            @Override
-                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-
-                                return false;
-                            }
-                        }).into(holder.mImage);
+                     .into(holder.mImage);
             }
         }
 
@@ -183,6 +130,16 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
     @Override
     public int getItemCount() {
         return mTrip.size();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 
     class VisitorViewHolder extends RecyclerView.ViewHolder
@@ -268,6 +225,6 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
     VisitorInterface listener;
     public interface VisitorInterface{
         void setProfileVisit(String uid, String id);
-        void setData(UserImg mTrip,int position);
+        void setData(UserImg mTrip, int position);
     }
 }
